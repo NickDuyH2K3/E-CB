@@ -1,0 +1,10 @@
+# Changes here will be overwritten by Copier
+_commit: v2.0.5
+_src_path: gh:lincc-frameworks/python-project-template
+author_email: duyhk.21it@vku.udn.vn
+author_name: Hoang Khanh Duy
+custom_install: false
+package_name: e_cb
+project_license: none
+project_name: e-cb
+project_organization: VKU
