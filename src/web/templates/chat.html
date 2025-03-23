@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat with {{ bot.name }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Chat with {{ bot.name }}</h1>
+        
+        <div class="chat-container">
+            <div id="chat-messages" class="chat-messages">
+                <div class="message bot">
+                    <div class="message-content">Hello! How can I help you today?</div>
+                </div>
+            </div>
+            
+            <div class="chat-input">
+                <input type="text" id="user-input" placeholder="Type your message...">
+                <button id="send-button">Send</button>
+            </div>
+        </div>
+        
+        <div class="actions">
+            <a href="{{ url_for('bot_dashboard', bot_id=bot_id) }}" class="button">Back to Dashboard</a>
+        </div>
+    </div>
+    
+    <script>
+        $(document).ready(function() {
+            $('#send-button').click(sendMessage);
+            $('#user-input').keypress(function(e) {
+                if(e.which == 13) {
+                    sendMessage();
+                }
+            });
+            
+            function sendMessage() {
+                var userMessage = $('#user-input').val().trim();
+                if(userMessage === '') return;
+                
+                // Add user message to chat
+                $('#chat-messages').append(
+                    '<div class="message user"><div class="message-content">' + 
+                    userMessage + '</div></div>'
+                );
+                
+                // Clear input
+                $('#user-input').val('');
+                
+                // Send to API
+                $.ajax({
+                    url: '/api/bot/{{ bot_id }}/chat',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ message: userMessage }),
+                    success: function(data) {
+                        // Add bot response to chat
+                        $('#chat-messages').append(
+                            '<div class="message bot"><div class="message-content">' + 
+                            data.response + '</div></div>'
+                        );
+                        
+                        // Scroll to bottom
+                        $('#chat-messages').scrollTop($('#chat-messages')[0].scrollHeight);
+                    }
+                });
+                
+                // Scroll to bottom
+                $('#chat-messages').scrollTop($('#chat-messages')[0].scrollHeight);
+            }
+        });
+    </script>
+</body>
+</html>

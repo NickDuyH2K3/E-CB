@@ -1,0 +1,30 @@
+{
+    "name": "test",
+    "description": "test bot\r\n",
+    "intents": {
+        "greeting": [
+            "hello",
+            "hi",
+            "hey"
+        ],
+        "farewell": [
+            "bye",
+            "goodbye",
+            "see you"
+        ]
+    },
+    "responses": {
+        "greeting": [
+            "Hello!",
+            "Hi there!"
+        ],
+        "farewell": [
+            "Goodbye!",
+            "See you later!"
+        ],
+        "unknown": [
+            "I don't understand.",
+            "Could you rephrase that?"
+        ]
+    }
+}
