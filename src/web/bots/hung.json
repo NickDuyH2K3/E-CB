@@ -1,0 +1,38 @@
+{
+    "name": "Hung",
+    "description": "Bot cua Hung",
+    "intents": {
+        "greeting": [
+            "hello",
+            "hi",
+            "hey"
+        ],
+        "farewell": [
+            "bye",
+            "goodbye",
+            "see you"
+        ],
+        "Hmmmm": [
+            "thinking",
+            "test"
+        ]
+    },
+    "responses": {
+        "greeting": [
+            "Hello!",
+            "Hi there!"
+        ],
+        "farewell": [
+            "Goodbye!",
+            "See you later!"
+        ],
+        "unknown": [
+            "I don't understand.",
+            "Could you rephrase that?"
+        ],
+        "Hmmmm": [
+            "Deepthoughts",
+            "Test"
+        ]
+    }
+}

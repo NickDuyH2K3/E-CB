@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Intents - {{ bot.name }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Edit Intents for {{ bot.name }}</h1>
+        
+        <div class="existing-intents">
+            <h2>Current Intents</h2>
+            {% if bot.intents %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Intent Name</th>
+                            <th>Training Phrases</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for intent_name, phrases in bot.intents.items() %}
+                        <tr>
+                            <td>{{ intent_name }}</td>
+                            <td>{{ ', '.join(phrases) }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>No intents defined yet.</p>
+            {% endif %}
+        </div>
+        
+        <div class="add-intent-form">
+            <h2>Add/Edit Intent</h2>
+            <form method="post">
+                <div class="form-group">
+                    <label for="intent_name">Intent Name:</label>
+                    <input type="text" id="intent_name" name="intent_name" required 
+                           placeholder="e.g., greeting, farewell, help">
+                </div>
+                
+                <div class="form-group">
+                    <label for="phrases">Training Phrases (one per line):</label>
+                    <textarea id="phrases" name="phrases" rows="5" required 
+                              placeholder="Enter training phrases for this intent.&#10;Each phrase on a new line.&#10;e.g.&#10;hello&#10;hi there&#10;hey"></textarea>
+                </div>
+                
+                <div class="form-actions">
+                    <a href="{{ url_for('bot_routes.bot_dashboard', bot_id=bot_id) }}" class="button secondary">Cancel</a>
+                    <button type="submit" class="button primary">Save Intent</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

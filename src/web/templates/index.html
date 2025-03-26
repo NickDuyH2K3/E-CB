@@ -9,7 +9,7 @@
         <h1>Chatbot Framework Dashboard</h1>
         
         <div class="action-button">
-            <a href="{{ url_for('create_bot') }}" class="button">Create New Bot</a>
+            <a href="{{ url_for('base_routes.create_bot') }}" class="button">Create New Bot</a>
         </div>
         
         <h2>Your Chatbots</h2>
@@ -20,8 +20,8 @@
                         <h3>{{ bot.name }}</h3>
                         <p>{{ bot.description }}</p>
                         <div class="bot-actions">
-                            <a href="{{ url_for('bot_dashboard', bot_id=bot_id) }}" class="button">Manage</a>
-                            <a href="{{ url_for('chat_interface', bot_id=bot_id) }}" class="button">Chat</a>
+                            <a href="{{ url_for('bot_routes.bot_dashboard', bot_id=bot_id) }}" class="button">Manage</a>
+                            <a href="{{ url_for('bot_routes.chat_interface', bot_id=bot_id) }}" class="button">Chat</a>
                         </div>
                     </div>
                 {% endfor %}

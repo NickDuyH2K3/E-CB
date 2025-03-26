@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ bot.name }} - Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>{{ bot.name }} Dashboard</h1>
+        
+        <div class="bot-details">
+            <h2>Bot Information</h2>
+            <p><strong>Name:</strong> {{ bot.name }}</p>
+            <p><strong>Description:</strong> {{ bot.description or 'No description provided' }}</p>
+        </div>
+        
+        <div class="bot-management">
+            <h2>Bot Management</h2>
+            <div class="action-buttons">
+                <a href="{{ url_for('bot_routes.edit_intents', bot_id=bot_id) }}" class="button">Manage Intents</a>
+                <a href="{{ url_for('bot_routes.edit_responses', bot_id=bot_id) }}" class="button">Manage Responses</a>
+                <a href="{{ url_for('bot_routes.chat_interface', bot_id=bot_id) }}" class="button">Open Chat</a>
+            </div>
+        </div>
+        
+        <div class="bot-details-section">
+            <div class="bot-intents">
+                <h2>Current Intents</h2>
+                {% if bot.intents %}
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Intent Name</th>
+                                <th>Training Phrases</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for intent_name, phrases in bot.intents.items() %}
+                            <tr>
+                                <td>{{ intent_name }}</td>
+                                <td>{{ ', '.join(phrases) }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p>No intents defined yet.</p>
+                {% endif %}
+            </div>
+            
+            <div class="bot-responses">
+                <h2>Current Responses</h2>
+                {% if bot.responses %}
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Intent</th>
+                                <th>Responses</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for intent_name, responses in bot.responses.items() %}
+                            <tr>
+                                <td>{{ intent_name }}</td>
+                                <td>{{ ', '.join(responses) }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p>No responses defined yet.</p>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="actions">
+            <a href="{{ url_for('base_routes.index') }}" class="button secondary">Back to Dashboard</a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Responses - {{ bot.name }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Edit Responses for {{ bot.name }}</h1>
+        
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        
+        <div class="existing-responses">
+            <h2>Current Responses</h2>
+            {% if bot.responses %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Intent</th>
+                            <th>Responses</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for intent_name, responses in bot.responses.items() %}
+                        <tr>
+                            <td>{{ intent_name }}</td>
+                            <td>{{ ', '.join(responses) }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>No responses defined yet.</p>
+            {% endif %}
+        </div>
+        
+        <div class="add-response-form">
+            <h2>Add/Edit Response</h2>
+            <form method="post">
+                <div class="form-group">
+                    <label for="intent_name">Intent Name:</label>
+                    <select id="intent_name" name="intent_name" required>
+                        <option value="">Select an Intent</option>
+                        {% for intent_name in bot.intents.keys() %}
+                            <option value="{{ intent_name }}">{{ intent_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="responses">Responses (one per line):</label>
+                    <textarea id="responses" name="responses" rows="5" required 
+                              placeholder="Enter responses for the selected intent.&#10;Each response on a new line.&#10;e.g.&#10;Hello there!&#10;Hi, how are you?"></textarea>
+                </div>
+                
+                <div class="form-actions">
+                    <a href="{{ url_for('bot_routes.bot_dashboard', bot_id=bot_id) }}" class="button secondary">Cancel</a>
+                    <button type="submit" class="button primary">Save Responses</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

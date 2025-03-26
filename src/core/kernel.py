@@ -52,7 +52,13 @@ class ChatbotKernel:
             
         # Process through pipeline
         normalized_input = self.components['input_handler'].normalize(message)
-        intent = self.components['nlu'].get_intent(normalized_input)
+        
+        # Handle both SimpleNLU and SpacyNLU
+        intent_result = self.components['nlu'].get_intent(normalized_input)
+        
+        # Extract intent name (compatible with both NLU implementations)
+        intent = intent_result['name'] if isinstance(intent_result, dict) else intent_result
+        
         response = self.components['response_generator'].generate(intent)
         
         return response

@@ -1,5 +1,5 @@
 import random
-from typing import Dict, List
+from typing import Union, Dict, Any
 
 class ResponseGenerator:
     """
@@ -7,7 +7,7 @@ class ResponseGenerator:
     """
     
     def __init__(self):
-        self.templates: Dict[str, List[str]] = {
+        self.templates = {
             'greeting': [
                 'Hello there!',
                 'Hi! How can I help you today?',
@@ -23,7 +23,7 @@ class ResponseGenerator:
                 'Happy to help!',
                 'Anytime!'
             ],
-            'help': [
+            'help_request': [
                 'I can help you with various tasks. Just tell me what you need!',
                 'What kind of assistance do you need?',
                 'I\'m here to help. What would you like to know?'
@@ -35,15 +35,19 @@ class ResponseGenerator:
             ]
         }
     
-    def generate(self, intent: str) -> str:
+    def generate(self, intent: Union[str, Dict[str, Any]]) -> str:
         """
         Generate a response based on intent.
         
         Args:
-            intent: Recognized intent
+            intent: Recognized intent (string or dictionary)
             
         Returns:
             Response text
         """
-        responses = self.templates.get(intent, self.templates['unknown'])
+        # Extract intent name if it's a dictionary
+        intent_name = intent['name'] if isinstance(intent, dict) else intent
+        
+        # Get appropriate response template
+        responses = self.templates.get(intent_name, self.templates['unknown'])
         return random.choice(responses)
