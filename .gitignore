@@ -112,6 +112,18 @@ ENV/
 env.bak/
 venv.bak/
 
+# Project-specific virtual environment files
+e-cb/
+Scripts/
+Include/
+Lib/
+etc/
+pyvenv.cfg
+share/
+python*/
+bin/
+tcl/
+
 # Spyder project settings
 .spyderproject
 .spyproject
