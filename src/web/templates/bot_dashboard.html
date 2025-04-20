@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>{{ bot.name }} - Dashboard</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
 </head>
 <body>
     <div class="container">
@@ -37,8 +37,8 @@
                         <tbody>
                             {% for intent_name, phrases in bot.intents.items() %}
                             <tr>
-                                <td>{{ intent_name }}</td>
-                                <td>{{ ', '.join(phrases) }}</td>
+                                <td data-label="Intern Name">{{ intent_name }}</td>
+                                <td data-label="Training Phrases">{{ ', '.join(phrases) }}</td>
                             </tr>
                             {% endfor %}
                         </tbody>

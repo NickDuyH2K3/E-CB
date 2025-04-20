@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>Edit Responses - {{ bot.name }}</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/responses.css') }}">
 </head>
 <body>
     <div class="container">
@@ -62,8 +62,8 @@
                 </div>
                 
                 <div class="form-actions">
-                    <a href="{{ url_for('bot_routes.bot_dashboard', bot_id=bot_id) }}" class="button secondary">Cancel</a>
                     <button type="submit" class="button primary">Save Responses</button>
+                    <a href="{{ url_for('bot_routes.bot_dashboard', bot_id=bot_id) }}" class="button secondary">Cancel</a>
                 </div>
             </form>
         </div>

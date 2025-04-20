@@ -2,16 +2,15 @@
 <html>
 <head>
     <title>Chatbot Framework</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
 </head>
 <body>
+    <div class="sidebar">
+        <h1>Chatbot Framework</h1>
+        <a href="{{ url_for('base_routes.create_bot') }}">Create New Bot</a>
+    </div>
+
     <div class="container">
-        <h1>Chatbot Framework Dashboard</h1>
-        
-        <div class="action-button">
-            <a href="{{ url_for('base_routes.create_bot') }}" class="button">Create New Bot</a>
-        </div>
-        
         <h2>Your Chatbots</h2>
         {% if bots %}
             <div class="bots-list">
@@ -31,4 +30,5 @@
         {% endif %}
     </div>
 </body>
+
 </html>
