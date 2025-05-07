@@ -2,6 +2,10 @@ import spacy
 from typing import Dict, Any, List
 import difflib
 
+THRESHOLD: float = 0.6
+HIGH_CONFIDENCE: float = 0.8
+LOW_CONFIDENCE: float = 0.2
+
 class SpacyNLU:
     """
     Enhanced Natural Language Understanding component
@@ -58,20 +62,19 @@ class SpacyNLU:
             }
         }
     
-    def _fuzzy_match(self, text: str, patterns: List[str], threshold: float = 0.6) -> bool:
+    def _fuzzy_match(self, text: str, patterns: List[str]) -> bool:
         """
         Perform fuzzy matching of text against patterns.
         
         Args:
             text: Input text to match
             patterns: List of pattern strings
-            threshold: Similarity threshold
         
         Returns:
             Boolean indicating if a match is found
         """
         return any(
-            difflib.SequenceMatcher(None, text.lower(), pattern.lower()).ratio() >= threshold
+            difflib.SequenceMatcher(None, text.lower(), pattern.lower()).ratio() >= THRESHOLD
             for pattern in patterns
         )
     
@@ -107,7 +110,7 @@ class SpacyNLU:
             
             # Calculate confidence
             if keyword_match or pattern_match:
-                confidence = 0.8 if keyword_match else 0.6
+                confidence = HIGH_CONFIDENCE if keyword_match else LOW_CONFIDENCE
                 return {
                     'name': intent,
                     'confidence': confidence,
@@ -117,7 +120,7 @@ class SpacyNLU:
         # Fallback intent
         return {
             'name': 'unknown',
-            'confidence': 0.2,
+            'confidence': LOW_CONFIDENCE,
             'entities': entities
         }
     

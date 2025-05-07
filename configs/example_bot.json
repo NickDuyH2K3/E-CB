@@ -1,0 +1,72 @@
+{
+  "name": "Config Bot",
+  "description": "A bot configured using a JSON file",
+  "debug": true,
+  "error_responses": {
+    "IntentError": "I don't understand what you mean. Can you try different words?",
+    "ComponentNotFoundError": "I'm not fully set up yet. Please try again later.",
+    "default": "Sorry, something went wrong."
+  },
+  "components": {
+    "nlu": {
+      "type": "simple",
+      "intents": {
+        "greeting": [
+          "hello",
+          "hi",
+          "hey",
+          "good morning",
+          "good afternoon"
+        ],
+        "farewell": [
+          "bye",
+          "goodbye",
+          "see you later",
+          "exit",
+          "quit"
+        ],
+        "help": [
+          "help",
+          "assist",
+          "support",
+          "guide",
+          "instructions"
+        ],
+        "info": [
+          "what can you do",
+          "tell me about yourself",
+          "who are you",
+          "features"
+        ]
+      }
+    },
+    "response_generator": {
+      "responses": {
+        "greeting": [
+          "Hello! I'm a config-based bot.",
+          "Hi there! I was configured from a file.",
+          "Greetings! Nice to see you."
+        ],
+        "farewell": [
+          "Goodbye! Thanks for trying the config bot.",
+          "See you later! Have a great day.",
+          "Bye for now."
+        ],
+        "help": [
+          "I can demonstrate how configuration works in the E-CB framework.",
+          "I'm here to show you how to use ConfigLoader and ErrorHandler.",
+          "Need help? Try asking me about config files or error handling."
+        ],
+        "info": [
+          "I'm a chatbot configured from a JSON file. My responses, intents, and error handling are all defined in the configuration.",
+          "I demonstrate the E-CB framework's configuration system. My settings are loaded from a JSON file at startup."
+        ],
+        "unknown": [
+          "I'm not sure what you mean. My responses are defined in my configuration file.",
+          "I don't have a response for that in my configuration.",
+          "I don't know how to respond to that."
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,4 @@
+flask>=2.0.0
+spacy>=3.5.0
+pyyaml>=6.0.0
+flask-wtf>=0.14.0

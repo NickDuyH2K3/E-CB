@@ -15,6 +15,7 @@ setup(
         'flask>=2.0.0',
         'flask-wtf',  # For form handling
         'spacy>=3.5.0',
+        'pyyaml>=6.0.0',
         # Any other dependencies
     ],
     extras_require={

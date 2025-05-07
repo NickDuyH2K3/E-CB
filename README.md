@@ -11,75 +11,73 @@ A flexible and extensible chatbot framework built with Python.
 
 ## Installation
 
-### End Users
+### Quick Installation (End Users)
 
-If you just want to use the chatbot framework in your project:
+To use the framework in your project:
 
 ```bash
 pip install e-cb
 ```
 
-### For Developers
+### Developer Installation
 
-#### Prerequisites
+#### Step 1: Set Up a Virtual Environment
 
-Before installing any dependencies or writing code, it's highly recommended to create a virtual environment:
+Choose one method:
 
-**Using conda (recommended)**:
+**Option A: Using conda (recommended)**
 ```bash
 conda create -n chatbot-env python=3.10
 conda activate chatbot-env
 ```
 
-**Using venv**:
+**Option B: Using venv**
 ```bash
-# On Windows
+# Windows
 python -m venv venv
 venv\Scripts\activate
 
-# On macOS/Linux
+# macOS/Linux
 python -m venv venv
 source venv/bin/activate
 ```
 
-#### Setup for Development
+#### Step 2: Get the Code
 
-1. Clone the repository:
+Clone the repository:
 ```bash
 git clone https://github.com/NickDuyH2K3/E-CB.git
 cd e-cb
 ```
 
-2. Run the appropriate setup script for your operating system:
+#### Step 3: Install Dependencies
 
-**On Windows**:
+Run the appropriate setup script:
+
 ```bash
+# Windows
 .\setup_dev.bat
-```
 
-**On macOS/Linux**:
-```bash
+# macOS/Linux
 chmod +x ./.setup_dev.sh
 ./.setup_dev.sh
 ```
 
-3. Install pandoc (needed for documentation generation):
+#### Step 4: Install Documentation Tools
 
-**Using conda**:
+Install pandoc for generating documentation:
+
 ```bash
+# Using conda
 conda install pandoc
-```
 
-**On Windows (without conda)**:
-Download from [pandoc.org](https://pandoc.org/installing.html)
-
-**On macOS**:
-```bash
+# macOS
 brew install pandoc
-```
 
-**On Linux**:
-```bash
+# Windows (without conda)
+# Download from https://pandoc.org/installing.html
+
+# Linux
 sudo apt-get install pandoc
 ```
 
@@ -87,8 +85,18 @@ sudo apt-get install pandoc
 
 Basic usage example:
 
+```python
+from e_cb import ChatBot
 
-See the [documentation](https://e-cb.readthedocs.io/) for more detailed usage examples and API reference.
+# Initialize a simple chatbot
+bot = ChatBot()
+
+# Get a response
+response = bot.get_response("Hello, how are you?")
+print(response)
+```
+
+See the [documentation](https://e-cb.readthedocs.io/) for more detailed examples and API reference.
 
 ## Development
 
@@ -109,8 +117,7 @@ The documentation will be available in `docs/_build/html`.
 
 ### Pre-commit Hooks
 
-This project uses pre-commit hooks to ensure code quality. They were automatically installed during the setup process and will run each time you attempt to commit changes.
-
+This project uses pre-commit hooks to ensure code quality. They were automatically installed during the setup process and will run each time you commit changes.
 
 ## Project Origins
 

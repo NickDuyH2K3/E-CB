@@ -6,7 +6,7 @@ import json
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 sys.path.insert(0, project_root)
 
-from routes.base_routes import BotManager
+from .base_routes import BotManager
 
 bot_routes = Blueprint('bot_routes', __name__)
 
