@@ -6,6 +6,7 @@ from typing import Dict, Any, Optional
 
 from core.config import ConfigLoader
 from core.errors import ComponentNotFoundError, ChatbotError, ErrorHandler
+from core.context import ConversationContext
 
 
 class ChatbotKernel:
@@ -74,11 +75,9 @@ class ChatbotKernel:
     
     def process_message(self, message: str) -> str:
         """
-        Process a user message through the pipeline.
-        
+        Process a user message through the pipeline using ConversationContext.
         Args:
             message: User input text
-            
         Returns:
             Response text
         """
@@ -88,39 +87,28 @@ class ChatbotKernel:
             for component in required_components:
                 if component not in self.components:
                     raise ComponentNotFoundError(component)
-                
-            # Get dialog manager if available
             dialog_manager = self.components.get('dialog_manager')
-            
-            # Process through pipeline
-            normalized_input = self.components['input_handler'].normalize(message)
-            
-            # Handle both SimpleNLU and SpacyNLU
-            intent_result = self.components['nlu'].get_intent(normalized_input)
-            
-            # Update dialog state if dialog manager is available
+            # Create context object
+            context = ConversationContext(input_text=message)
+            # Input normalization
+            context = self.components['input_handler'].normalize(context)
+            # NLU
+            context = self.components['nlu'].get_intent(context)
+            # Dialog state update
             if dialog_manager:
-                dialog_manager.update_state(intent_result, message)
-                next_action = dialog_manager.get_next_action()
-                response = self.components['response_generator'].generate(intent_result, next_action)
-                
-                # Add bot response to history
-                dialog_manager.add_to_history('bot', response)
+                context = dialog_manager.update_state(context)
+                context = dialog_manager.get_next_action(context)
+                context = self.components['response_generator'].generate(context)
+                context = dialog_manager.add_to_history(context, 'bot', context.response)
             else:
-                # Extract intent name (compatible with both NLU implementations)
-                intent = intent_result['name'] if isinstance(intent_result, dict) else intent_result
-                response = self.components['response_generator'].generate(intent)
-            
-            return response
-        
+                context = self.components['response_generator'].generate(context)
+            return context.response
         except ChatbotError as e:
-            # Log the error but provide user-friendly response
             debug_enabled = self.config.get('debug', False)
             if debug_enabled:
                 print(f"ChatbotError: {str(e)}")
             return self.error_handler.handle_error(e)
         except Exception as e:
-            # Unexpected error
             debug_enabled = self.config.get('debug', False)
             if debug_enabled:
                 import traceback

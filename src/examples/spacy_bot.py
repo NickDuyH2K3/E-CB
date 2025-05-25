@@ -8,6 +8,7 @@ from core.kernel import ChatbotKernel
 from pipeline.input_handler import InputHandler
 from pipeline.nlu import SpacyNLU
 from pipeline.response_generator import ResponseGenerator
+from core.context import ConversationContext
 
 def main():
     """
@@ -52,9 +53,13 @@ def main():
             
             # Process message and get response
             response = kernel.process_message(user_input)
-            
-            # Get intent details for demonstration
-            intent_details = kernel.get_component('nlu').get_intent(user_input)
+
+            # Get the context after NLU processing for intent details
+            # We'll reconstruct the context as the kernel does
+            context = ConversationContext(input_text=user_input)
+            context = kernel.get_component('input_handler').normalize(context)
+            context = kernel.get_component('nlu').get_intent(context)
+            intent_details = context.intent
             
             # Print detailed intent information
             print(f"\n[Intent Analysis]")

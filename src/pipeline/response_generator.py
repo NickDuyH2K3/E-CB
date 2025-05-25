@@ -1,6 +1,7 @@
 # src/pipeline/response_generator.py (updated)
 import random
 from typing import Union, Dict, Any, Optional
+from core.context import ConversationContext
 
 class ResponseGenerator:
     """
@@ -60,49 +61,38 @@ class ResponseGenerator:
             }
         }
     
-    def generate(self, intent: Union[str, Dict[str, Any]], dialog_state: Optional[Dict[str, Any]] = None) -> str:
+    def generate(self, context: ConversationContext) -> ConversationContext:
         """
-        Generate a response based on intent and dialog state.
-        
+        Generate a response based on context (intent, dialog state, entities).
         Args:
-            intent: Recognized intent (string or dictionary)
-            dialog_state: Optional dialog state information
-            
+            context: ConversationContext object
         Returns:
-            Response text
+            Updated ConversationContext object with response field set
         """
+        intent = context.intent
+        dialog_state = context.dialog_state
         # Extract intent name if it's a dictionary
         intent_name = intent['name'] if isinstance(intent, dict) else intent
-        
         # Check for flow-specific responses
-        if dialog_state and dialog_state.get('type') == 'flow_step':
-            flow = dialog_state.get('flow')
-            step = dialog_state.get('step')
-            
+        if dialog_state and dialog_state.get('next_action', {}).get('type') == 'flow_step':
+            flow = dialog_state['next_action'].get('flow')
+            step = dialog_state['next_action'].get('step')
             if flow in self.flow_responses and step in self.flow_responses[flow]:
                 response_template = self.flow_responses[flow][step]
-                
                 # Handle template variables
                 if '{' in response_template and dialog_state.get('context'):
-                    context = dialog_state.get('context', {})
-                    for key, value in context.items():
+                    context_vars = dialog_state.get('context', {})
+                    for key, value in context_vars.items():
                         response_template = response_template.replace(f'{{{key}}}', str(value))
-                
-                return response_template
-        
+                context.response = response_template
+                return context
         # Extract entities for response personalization if available
-        entities = {}
-        if isinstance(intent, dict) and 'entities' in intent:
-            entities = intent['entities']
-        
-        # Get appropriate response template
+        entities = context.entities if context.entities else {}
         responses = self.templates.get(intent_name, self.templates['unknown'])
         base_response = random.choice(responses)
-        
-        # Personalize response if possible
         personalized_response = self._personalize_response(base_response, entities)
-        
-        return personalized_response
+        context.response = personalized_response
+        return context
     
     def _personalize_response(self, response: str, entities: Dict[str, Any]) -> str:
         """

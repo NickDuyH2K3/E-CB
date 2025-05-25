@@ -1,3 +1,5 @@
+from core.context import ConversationContext
+
 class SimpleNLU:
     """
     Simple Natural Language Understanding component.
@@ -13,17 +15,18 @@ class SimpleNLU:
             'help': ['help', 'assist', 'support', 'guide me']
         }
     
-    def get_intent(self, text: str) -> str:
+    def get_intent(self, context: ConversationContext) -> ConversationContext:
         """
-        Extract intent from normalized text.
-        
+        Extract intent from normalized text and update the context.
         Args:
-            text: Normalized user input
-            
+            context: ConversationContext object
         Returns:
-            Intent name as string
+            Updated ConversationContext object
         """
+        text = context.normalized_text
         for intent, keywords in self.patterns.items():
             if any(keyword in text for keyword in keywords):
-                return intent
-        return 'unknown'
+                context.intent = {'name': intent}
+                return context
+        context.intent = {'name': 'unknown'}
+        return context

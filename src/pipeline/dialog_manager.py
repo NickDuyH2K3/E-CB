@@ -1,4 +1,5 @@
 from typing import Dict, Any, List, Optional
+from core.context import ConversationContext
 
 HISTORY_LIMIT = 3
 TURN_INCREMENT = 1
@@ -25,36 +26,35 @@ class DialogManager:
         self.state = DialogState()
         self.flows = {}
     
-    def update_state(self, intent: Dict[str, Any], user_input: str) -> None:
+    def update_state(self, context: ConversationContext) -> ConversationContext:
         """
-        Update the dialog state based on latest interaction.
-        
+        Update the dialog state in the context based on latest interaction.
         Args:
-            intent: Intent recognition result
-            user_input: Original user input
+            context: ConversationContext object
+        Returns:
+            Updated ConversationContext object
         """
-        # Store previous intent
-        self.state.previous_intent = self.state.current_intent
-        
-        # Update current intent
-        self.state.current_intent = intent.get('name') if isinstance(intent, dict) else intent
-        
+        state = context.dialog_state
+        state['previous_intent'] = state.get('current_intent')
+        state['current_intent'] = context.intent.get('name') if isinstance(context.intent, dict) else context.intent
         # Update entities if available
-        if isinstance(intent, dict) and 'entities' in intent:
-            for entity_type, values in intent['entities'].items():
-                if entity_type not in self.state.entities:
-                    self.state.entities[entity_type] = []
-                self.state.entities[entity_type].extend(values)
-        
+        if isinstance(context.intent, dict) and 'entities' in context.intent:
+            if 'entities' not in state:
+                state['entities'] = {}
+            for entity_type, values in context.intent['entities'].items():
+                if entity_type not in state['entities']:
+                    state['entities'][entity_type] = []
+                state['entities'][entity_type].extend(values)
         # Add to conversation history
-        self.state.conversation_history.append({
+        context.history.append({
             'role': 'user',
-            'content': user_input,
-            'turn': self.state.turn_count
+            'content': context.input_text,
+            'turn': state.get('turn_count', 0)
         })
-        
         # Increment turn counter
-        self.state.turn_count += TURN_INCREMENT
+        state['turn_count'] = state.get('turn_count', 0) + 1
+        context.dialog_state = state
+        return context
     
     def register_flow(self, name: str, flow_definition: Dict[str, Any]) -> None:
         """
@@ -66,38 +66,37 @@ class DialogManager:
         """
         self.flows[name] = flow_definition
     
-    def get_next_action(self) -> Dict[str, Any]:
+    def get_next_action(self, context: ConversationContext) -> ConversationContext:
         """
-        Determine the next action based on current state.
-        
+        Determine the next action based on current state and update context.
+        Args:
+            context: ConversationContext object
         Returns:
-            Dictionary with next action information
+            Updated ConversationContext object with next action info in dialog_state
         """
+        state = context.dialog_state
         # Check if we're in an active flow
-        if self.state.active_flow and self.state.active_flow in self.flows:
-            flow = self.flows[self.state.active_flow]
-            current_step = self.state.context.get('flow_step')
-            
-            # Check if there's a next step in the flow
+        if state.get('active_flow') and hasattr(self, 'flows') and state['active_flow'] in self.flows:
+            flow = self.flows[state['active_flow']]
+            current_step = state.get('flow_step')
             if current_step in flow and 'next' in flow[current_step]:
                 next_step = flow[current_step]['next']
-                
-                # Update the flow step
-                self.state.context['flow_step'] = next_step
-                
-                # Return action for the next step
-                return {
+                state['flow_step'] = next_step
+                state['next_action'] = {
                     'type': 'flow_step',
-                    'flow': self.state.active_flow,
+                    'flow': state['active_flow'],
                     'step': next_step,
                     'action': flow[next_step].get('action', {})
                 }
-        
+                context.dialog_state = state
+                return context
         # Default action based on intent
-        return {
+        state['next_action'] = {
             'type': 'intent_response',
-            'intent': self.state.current_intent
+            'intent': state.get('current_intent')
         }
+        context.dialog_state = state
+        return context
     
     def start_flow(self, flow_name: str) -> bool:
         """
@@ -123,19 +122,23 @@ class DialogManager:
         if 'flow_step' in self.state.context:
             del self.state.context['flow_step']
     
-    def add_to_history(self, role: str, content: str) -> None:
+    def add_to_history(self, context: ConversationContext, role: str, content: str) -> ConversationContext:
         """
-        Add a message to conversation history.
-        
+        Add a message to conversation history in the context.
         Args:
+            context: ConversationContext object
             role: Message role ('user', 'bot')
             content: Message content
+        Returns:
+            Updated ConversationContext object
         """
-        self.state.conversation_history.append({
+        state = context.dialog_state
+        context.history.append({
             'role': role,
             'content': content,
-            'turn': self.state.turn_count
+            'turn': state.get('turn_count', 0)
         })
+        return context
     
     def get_context_for_intent(self, intent_name: str) -> Dict[str, Any]:
         """

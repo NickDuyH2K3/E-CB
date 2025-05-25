@@ -1,18 +1,20 @@
+from core.context import ConversationContext
+
 class InputHandler:
     """
     Handles preprocessing of user input.
     """
     
-    def normalize(self, text: str) -> str:
+    def normalize(self, context: ConversationContext) -> ConversationContext:
         """
-        Normalize input text.
+        Normalize input text and update the context.
         
         Args:
-            text: Raw user input
-            
+            context: ConversationContext object
+        
         Returns:
-            Normalized text
+            Updated ConversationContext object
         """
-        # Start with basic processing
         # Lowercase and remove extra whitespace
-        return text.lower().strip()
+        context.normalized_text = context.input_text.lower().strip()
+        return context

@@ -1,6 +1,7 @@
 import spacy
 from typing import Dict, Any, List
 import difflib
+from core.context import ConversationContext
 
 THRESHOLD: float = 0.6
 HIGH_CONFIDENCE: float = 0.8
@@ -78,51 +79,42 @@ class SpacyNLU:
             for pattern in patterns
         )
     
-    def get_intent(self, text: str) -> Dict[str, Any]:
+    def get_intent(self, context: ConversationContext) -> ConversationContext:
         """
-        Extract intent with more context and details.
-        
+        Extract intent and entities, update the context, and return it.
         Args:
-            text: User input text
-            
+            context: ConversationContext object
         Returns:
-            Dictionary with intent details
+            Updated ConversationContext object
         """
-        # Process the text with spaCy
+        text = context.normalized_text
         doc = self.nlp(text.lower())
-        
-        # Extract entities
         entities = self._extract_entities(doc)
-        
-        # Check for intent based on advanced matching
         for intent, pattern_data in self.intent_patterns.items():
-            # Check keywords
             keyword_match = any(
                 keyword in text.lower() 
                 for keyword in pattern_data.get('keywords', [])
             )
-            
-            # Check pattern matching
             pattern_match = self._fuzzy_match(
                 text, 
                 pattern_data.get('patterns', [])
             )
-            
-            # Calculate confidence
             if keyword_match or pattern_match:
                 confidence = HIGH_CONFIDENCE if keyword_match else LOW_CONFIDENCE
-                return {
+                context.intent = {
                     'name': intent,
                     'confidence': confidence,
                     'entities': entities
                 }
-        
-        # Fallback intent
-        return {
+                context.entities = entities
+                return context
+        context.intent = {
             'name': 'unknown',
             'confidence': LOW_CONFIDENCE,
             'entities': entities
         }
+        context.entities = entities
+        return context
     
     def _extract_entities(self, doc) -> Dict[str, List[str]]:
         """
