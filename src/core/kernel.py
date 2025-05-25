@@ -73,7 +73,7 @@ class ChatbotKernel:
         """
         return self.components.get(name)
     
-    def process_message(self, message: str) -> str:
+    async def process_message(self, message: str) -> str:
         """
         Process a user message through the pipeline using ConversationContext.
         Args:
@@ -91,17 +91,17 @@ class ChatbotKernel:
             # Create context object
             context = ConversationContext(input_text=message)
             # Input normalization
-            context = self.components['input_handler'].normalize(context)
+            context = await self.components['input_handler'].normalize(context)
             # NLU
-            context = self.components['nlu'].get_intent(context)
+            context = await self.components['nlu'].get_intent(context)
             # Dialog state update
             if dialog_manager:
-                context = dialog_manager.update_state(context)
-                context = dialog_manager.get_next_action(context)
-                context = self.components['response_generator'].generate(context)
-                context = dialog_manager.add_to_history(context, 'bot', context.response)
+                context = await dialog_manager.update_state(context)
+                context = await dialog_manager.get_next_action(context)
+                context = await self.components['response_generator'].generate(context)
+                context = await dialog_manager.add_to_history(context, 'bot', context.response)
             else:
-                context = self.components['response_generator'].generate(context)
+                context = await self.components['response_generator'].generate(context)
             return context.response
         except ChatbotError as e:
             debug_enabled = self.config.get('debug', False)

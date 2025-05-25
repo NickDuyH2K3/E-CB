@@ -2,8 +2,9 @@
 import random
 from typing import Union, Dict, Any, Optional
 from core.context import ConversationContext
+from core.interfaces import ResponseGeneratorComponent
 
-class ResponseGenerator:
+class ResponseGenerator(ResponseGeneratorComponent):
     """
     Generates responses based on recognized intent and dialog state.
     """
@@ -61,7 +62,7 @@ class ResponseGenerator:
             }
         }
     
-    def generate(self, context: ConversationContext) -> ConversationContext:
+    async def generate(self, context: ConversationContext) -> ConversationContext:
         """
         Generate a response based on context (intent, dialog state, entities).
         Args:

@@ -1,5 +1,7 @@
 from typing import Dict, Any, List, Optional
 from core.context import ConversationContext
+from core.interfaces import DialogManagerComponent
+import yaml
 
 HISTORY_LIMIT = 3
 TURN_INCREMENT = 1
@@ -17,7 +19,7 @@ class DialogState:
         self.turn_count = 0
         self.active_flow = None
 
-class DialogManager:
+class DialogManager(DialogManagerComponent):
     """
     Manages the conversation flow and state.
     """
@@ -26,7 +28,7 @@ class DialogManager:
         self.state = DialogState()
         self.flows = {}
     
-    def update_state(self, context: ConversationContext) -> ConversationContext:
+    async def update_state(self, context: ConversationContext) -> ConversationContext:
         """
         Update the dialog state in the context based on latest interaction.
         Args:
@@ -66,7 +68,7 @@ class DialogManager:
         """
         self.flows[name] = flow_definition
     
-    def get_next_action(self, context: ConversationContext) -> ConversationContext:
+    async def get_next_action(self, context: ConversationContext) -> ConversationContext:
         """
         Determine the next action based on current state and update context.
         Args:
@@ -122,7 +124,7 @@ class DialogManager:
         if 'flow_step' in self.state.context:
             del self.state.context['flow_step']
     
-    def add_to_history(self, context: ConversationContext, role: str, content: str) -> ConversationContext:
+    async def add_to_history(self, context: ConversationContext, role: str, content: str) -> ConversationContext:
         """
         Add a message to conversation history in the context.
         Args:
@@ -162,3 +164,14 @@ class DialogManager:
             context['recent_history'] = self.state.conversation_history[-HISTORY_LIMIT:] if len(self.state.conversation_history) > HISTORY_LIMIT else self.state.conversation_history
         
         return context
+
+    def load_flows_from_yaml(self, yaml_path: str) -> None:
+        """
+        Load dialog flows from a YAML file and register them.
+        Args:
+            yaml_path: Path to the YAML file containing dialog flows
+        """
+        with open(yaml_path, 'r', encoding='utf-8') as f:
+            flows = yaml.safe_load(f)
+            for name, flow in flows.items():
+                self.register_flow(name, flow)

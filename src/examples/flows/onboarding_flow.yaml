@@ -1,0 +1,12 @@
+onboarding:
+  start:
+    next: get_name
+    action: prompt_name
+  get_name:
+    next: explain_features
+    action: store_name
+  explain_features:
+    next: end
+    action: list_features
+  end:
+    action: end_flow 

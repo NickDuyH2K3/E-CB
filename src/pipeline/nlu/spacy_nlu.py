@@ -2,12 +2,13 @@ import spacy
 from typing import Dict, Any, List
 import difflib
 from core.context import ConversationContext
+from core.interfaces import NLUComponent
 
 THRESHOLD: float = 0.6
 HIGH_CONFIDENCE: float = 0.8
 LOW_CONFIDENCE: float = 0.2
 
-class SpacyNLU:
+class SpacyNLU(NLUComponent):
     """
     Enhanced Natural Language Understanding component
     with advanced intent recognition and entity extraction.
@@ -79,7 +80,7 @@ class SpacyNLU:
             for pattern in patterns
         )
     
-    def get_intent(self, context: ConversationContext) -> ConversationContext:
+    async def get_intent(self, context: ConversationContext) -> ConversationContext:
         """
         Extract intent and entities, update the context, and return it.
         Args:

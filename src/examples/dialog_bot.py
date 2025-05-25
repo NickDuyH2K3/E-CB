@@ -1,6 +1,7 @@
 # src/examples/dialog_bot.py
 import sys
 import os
+import asyncio
 
 # Add the project root to the Python path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -11,7 +12,7 @@ from pipeline.nlu import SpacyNLU
 from pipeline.response_generator import ResponseGenerator
 from pipeline.dialog_manager import DialogManager
 
-def main():
+async def main():
     """
     Run a chatbot using the dialog manager for state tracking.
     """
@@ -36,25 +37,8 @@ def main():
         patterns=['What\'s the weather like', 'temperature today']
     )
     
-    # Register a dialog flow
-    onboarding_flow = {
-        'start': {
-            'next': 'get_name',
-            'action': 'prompt_name'
-        },
-        'get_name': {
-            'next': 'explain_features',
-            'action': 'store_name'
-        },
-        'explain_features': {
-            'next': 'end',
-            'action': 'list_features'
-        },
-        'end': {
-            'action': 'end_flow'
-        }
-    }
-    dialog_manager.register_flow('onboarding', onboarding_flow)
+    # Load dialog flows from YAML file
+    dialog_manager.load_flows_from_yaml(os.path.join(os.path.dirname(__file__), 'flows/onboarding_flow.yaml'))
     
     # Register components to kernel
     kernel.register_component('input_handler', input_handler)
@@ -83,7 +67,7 @@ def main():
                 continue
             
             # Process message and get response
-            response = kernel.process_message(user_input)
+            response = await kernel.process_message(user_input)
             
             # Print bot response
             print(f"Bot: {response}")
@@ -102,4 +86,4 @@ def main():
             print(f"An error occurred: {e}")
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())

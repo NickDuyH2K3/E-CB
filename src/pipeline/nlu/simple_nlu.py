@@ -1,6 +1,7 @@
 from core.context import ConversationContext
+from core.interfaces import NLUComponent
 
-class SimpleNLU:
+class SimpleNLU(NLUComponent):
     """
     Simple Natural Language Understanding component.
     Uses keyword matching for intent recognition.
@@ -15,7 +16,7 @@ class SimpleNLU:
             'help': ['help', 'assist', 'support', 'guide me']
         }
     
-    def get_intent(self, context: ConversationContext) -> ConversationContext:
+    async def get_intent(self, context: ConversationContext) -> ConversationContext:
         """
         Extract intent from normalized text and update the context.
         Args:

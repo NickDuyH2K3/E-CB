@@ -1,11 +1,12 @@
 from core.context import ConversationContext
+from core.interfaces import InputHandlerComponent
 
-class InputHandler:
+class InputHandler(InputHandlerComponent):
     """
     Handles preprocessing of user input.
     """
     
-    def normalize(self, context: ConversationContext) -> ConversationContext:
+    async def normalize(self, context: ConversationContext) -> ConversationContext:
         """
         Normalize input text and update the context.
         

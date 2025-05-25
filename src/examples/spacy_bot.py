@@ -1,5 +1,6 @@
 import sys
 import os
+import asyncio
 
 # Add the project root to the Python path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -10,7 +11,7 @@ from pipeline.nlu import SpacyNLU
 from pipeline.response_generator import ResponseGenerator
 from core.context import ConversationContext
 
-def main():
+async def main():
     """
     Run a chatbot using the Spacy-enhanced NLU.
     """
@@ -52,13 +53,12 @@ def main():
                 break
             
             # Process message and get response
-            response = kernel.process_message(user_input)
+            response = await kernel.process_message(user_input)
 
             # Get the context after NLU processing for intent details
-            # We'll reconstruct the context as the kernel does
             context = ConversationContext(input_text=user_input)
-            context = kernel.get_component('input_handler').normalize(context)
-            context = kernel.get_component('nlu').get_intent(context)
+            context = await kernel.get_component('input_handler').normalize(context)
+            context = await kernel.get_component('nlu').get_intent(context)
             intent_details = context.intent
             
             # Print detailed intent information
@@ -79,4 +79,4 @@ def main():
             print(f"An error occurred: {e}")
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())
