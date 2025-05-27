@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-CB Embedding Documentation</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f8f9fa;
+        }
+        
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #007bff;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            background: #f1f3f5;
+            border-radius: 8px;
+            padding: 4px;
+            margin-bottom: 30px;
+        }
+        
+        .nav-tab {
+            flex: 1;
+            text-align: center;
+            padding: 12px;
+            background: transparent;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .nav-tab.active {
+            background: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            color: #007bff;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .code-block {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            padding: 16px;
+            margin: 16px 0;
+            overflow-x: auto;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .feature-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #007bff;
+        }
+        
+        .method-card {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .method-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+        
+        .badge {
+            display: inline-block;
+            background: #007bff;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-right: 8px;
+        }
+        
+        .warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+            padding: 16px;
+            border-radius: 6px;
+            margin: 16px 0;
+        }
+        
+        .success {
+            background: #d1edff;
+            border: 1px solid #b3d7ff;
+            color: #004085;
+            padding: 16px;
+            border-radius: 6px;
+            margin: 16px 0;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>E-CB Chatbot Embedding Guide</h1>
+            <p>Complete documentation for embedding E-CB chatbots into your website or application</p>
+        </div>
+        
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showTab('quick-start')">Quick Start</button>
+            <button class="nav-tab" onclick="showTab('methods')">Integration Methods</button>
+            <button class="nav-tab" onclick="showTab('configuration')">Configuration</button>
+            <button class="nav-tab" onclick="showTab('examples')">Examples</button>
+            <button class="nav-tab" onclick="showTab('api')">API Reference</button>
+        </div>
+        
+        <!-- Quick Start Tab -->
+        <div id="quick-start" class="tab-content active">
+            <h2>🚀 Quick Start</h2>
+            
+            <div class="success">
+                <strong>5-Minute Setup:</strong> Get your chatbot running on any website in just a few steps!
+            </div>
+            
+            <h3>Step 1: Get Your Bot ID</h3>
+            <p>First, create a bot in the E-CB dashboard and note your Bot ID. You'll find it in the bot settings.</p>
+            
+            <h3>Step 2: Choose Integration Method</h3>
+            
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>📋 Script Tag (Easiest)</h4>
+                    <p>Copy and paste one script tag. Perfect for most websites.</p>
+                    <div class="code-block">
+&lt;script async src="https://your-domain.com/cdn/ecb-widget/v2/widget.min.js" 
+        data-bot-id="your-bot-id"&gt;&lt;/script&gt;
+                    </div>
+                </div>
+                
+                <div class="feature-card">
+                    <h4>🖼️ Iframe (Secure)</h4>
+                    <p>Isolated environment with enhanced security. Great for sensitive sites.</p>
+                    <div class="code-block">
+&lt;iframe src="https://your-domain.com/v2/bot/your-bot-id/iframe"
+        width="350" height="500"&gt;&lt;/iframe&gt;
+                    </div>
+                </div>
+                
+                <div class="feature-card">
+                    <h4>⚛️ React/Vue/Angular</h4>
+                    <p>Native components for modern frameworks. Full TypeScript support.</p>
+                    <div class="code-block">
+npm install @ecb/react-chatbot-widget
+                    </div>
+                </div>
+            </div>
+            
+            <h3>Step 3: Customize (Optional)</h3>
+            <p>Customize colors, position, behavior, and more through the dashboard or configuration options.</p>
+            
+            <div class="warning">
+                <strong>Note:</strong> Make sure your bot is published and active before embedding!
+            </div>
+        </div>
+        
+        <!-- Integration Methods Tab -->
+        <div id="methods" class="tab-content">
+            <h2>🔧 Integration Methods</h2>
+            
+            <div class="method-card">
+                <div class="method-title">
+                    <span class="badge">Recommended</span>
+                    Script Tag Integration
+                </div>
+                <p>The easiest way to add a chatbot to any website. Supports all modern browsers and frameworks.</p>
+                
+                <h4>Basic Implementation:</h4>
+                <div class="code-block">
+&lt;!-- Place this where you want the chatbot to appear --&gt;
+&lt;div id="ecb-chatbot-YOUR_BOT_ID"&gt;&lt;/div&gt;
+
+&lt;!-- Load the widget --&gt;
+&lt;script&gt;
+  window.ECBWidgetConfig = {
+    botId: 'YOUR_BOT_ID',
+    theme: 'modern',
+    primaryColor: '#007bff',
+    embedStyle: 'popup'
+  };
+&lt;/script&gt;
+&lt;script async src="https://your-domain.com/cdn/ecb-widget/v2/widget.min.js"&gt;&lt;/script&gt;
+                </div>
+                
+                <h4>Features:</h4>
+                <ul>
+                    <li>✅ Works on any HTML page</li>
+                    <li>✅ Automatic updates</li>
+                    <li>✅ CDN-hosted for fast loading</li>
+                    <li>✅ Mobile responsive</li>
+                    <li>✅ Session persistence</li>
+                </ul>
+            </div>
+            
+            <div class="method-card">
+                <div class="method-title">
+                    <span class="badge">Secure</span>
+                    Iframe Integration
+                </div>
+                <p>Isolated environment with enhanced security. Perfect for enterprise applications.</p>
+                
+                <div class="code-block">
+&lt;iframe src="https://your-domain.com/v2/bot/YOUR_BOT_ID/iframe?token=EMBED_TOKEN"
+        width="350"
+        height="500"
+        frameborder="0"
+        sandbox="allow-scripts allow-same-origin allow-forms"&gt;
+&lt;/iframe&gt;
+                </div>
+                
+                <h4>Security Features:</h4>
+                <ul>
+                    <li>🔒 Sandboxed execution</li>
+                    <li>🔒 Domain whitelisting</li>
+                    <li>🔒 Token-based authentication</li>
+                    <li>🔒 XSS protection</li>
+                </ul>
+            </div>
+            
+            <div class="method-card">
+                <div class="method-title">
+                    <span class="badge">Modern</span>
+                    Framework Components
+                </div>
+                <p>Native components for React, Vue, and Angular with full TypeScript support.</p>
+                
+                <h4>React Example:</h4>
+                <div class="code-block">
+import { ECBChatWidget } from '@ecb/react-chatbot-widget';
+
+function App() {
+  return (
+    &lt;ECBChatWidget
+      botId="YOUR_BOT_ID"
+      theme="modern"
+      primaryColor="#007bff"
+      onMessage={(msg) => console.log(msg)}
+    /&gt;
+  );
+}
+                </div>
+                
+                <h4>Available Packages:</h4>
+                <ul>
+                    <li>📦 @ecb/react-chatbot-widget</li>
+                    <li>📦 @ecb/vue-chatbot-widget</li>
+                    <li>📦 @ecb/angular-chatbot-widget</li>
+                    <li>📦 @ecb/chatbot-widget (Vanilla JS)</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Configuration Tab -->
+        <div id="configuration" class="tab-content">
+            <h2>⚙️ Configuration Options</h2>
+            
+            <h3>Appearance Settings</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Option</th>
+                        <th>Type</th>
+                        <th>Default</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>theme</code></td>
+                        <td>string</td>
+                        <td>'modern'</td>
+                        <td>Widget theme: 'modern', 'classic', 'minimal'</td>
+                    </tr>
+                    <tr>
+                        <td><code>primaryColor</code></td>
+                        <td>string</td>
+                        <td>'#007bff'</td>
+                        <td>Primary color for buttons and accents</td>
+                    </tr>
+                    <tr>
+                        <td><code>fontFamily</code></td>
+                        <td>string</td>
+                        <td>system fonts</td>
+                        <td>Font family for widget text</td>
+                    </tr>
+                    <tr>
+                        <td><code>borderRadius</code></td>
+                        <td>string</td>
+                        <td>'12px'</td>
+                        <td>Border radius for rounded corners</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h3>Behavior Settings</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Option</th>
+                        <th>Type</th>
+                        <th>Default</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>embedStyle</code></td>
+                        <td>string</td>
+                        <td>'popup'</td>
+                        <td>'popup', 'inline', 'fullscreen', 'drawer'</td>
+                    </tr>
+                    <tr>
+                        <td><code>autoOpen</code></td>
+                        <td>boolean</td>
+                        <td>false</td>
+                        <td>Auto-open chat on page load</td>
+                    </tr>
+                    <tr>
+                        <td><code>persistSession</code></td>
+                        <td>boolean</td>
+                        <td>true</td>
+                        <td>Remember conversation across page reloads</td>
+                    </tr>
+                    <tr>
+                        <td><code>position</code></td>
+                        <td>string</td>
+                        <td>'bottom-right'</td>
+                        <td>Widget position for popup style</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h3>Feature Toggles</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>Default</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>enableTypingIndicator</code></td>
+                        <td>true</td>
+                        <td>Show typing animation when bot is responding</td>
+                    </tr>
+                    <tr>
+                        <td><code>enableFileUpload</code></td>
+                        <td>false</td>
+                        <td>Allow users to upload files</td>
+                    </tr>
+                    <tr>
+                        <td><code>enableEmojis</code></td>
+                        <td>true</td>
+                        <td>Support emoji reactions and picker</td>
+                    </tr>
+                    <tr>
+                        <td><code>enableSuggestions</code></td>
+                        <td>true</td>
+                        <td>Show quick reply suggestions</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h3>Complete Configuration Example</h3>
+            <div class="code-block">
+window.ECBWidgetConfig = {
+  // Core settings
+  botId: 'your-bot-id',
+  apiUrl: 'https://your-api.com/chat',
+  
+  // Appearance
+  theme: 'modern',
+  primaryColor: '#6366f1',
+  fontFamily: 'Inter, sans-serif',
+  borderRadius: '16px',
+  
+  // Behavior
+  embedStyle: 'popup',
+  position: 'bottom-right',
+  autoOpen: false,
+  persistSession: true,
+  
+  // Messages
+  welcomeMessage: 'Hi! How can I help you today?',
+  placeholder: 'Type your message...',
+  
+  // Size and position
+  width: 380,
+  height: 600,
+  offset: { x: 24, y: 24 },
+  
+  // Features
+  enableTypingIndicator: true,
+  enableFileUpload: false,
+  enableEmojis: true,
+  enableSuggestions: true,
+  
+  // Callbacks
+  onReady: (widget) => console.log('Widget ready'),
+  onOpen: (widget) => console.log('Widget opened'),
+  onMessage: (data) => console.log('New message:', data),
+  onError: (error) => console.error('Widget error:', error)
+};
+            </div>
+        </div>
+        
+        <!-- Examples Tab -->
+        <div id="examples" class="tab-content">
+            <h2>💡 Implementation Examples</h2>
+            
+            <h3>E-commerce Website</h3>
+            <div class="code-block">
+&lt;!-- Product support chatbot --&gt;
+&lt;script&gt;
+window.ECBWidgetConfig = {
+  botId: 'ecommerce-bot-123',
+  theme: 'modern',
+  primaryColor: '#10b981',
+  welcomeMessage: 'Hi! Need help finding a product?',
+  position: 'bottom-right',
+  enableSuggestions: true,
+  
+  onMessage: (data) => {
+    // Track customer interactions
+    gtag('event', 'chatbot_interaction', {
+      'message_type': data.sender,
+      'bot_id': 'ecommerce-bot-123'
+    });
+  }
+};
+&lt;/script&gt;
+&lt;script async src="/cdn/ecb-widget/v2/widget.min.js"&gt;&lt;/script&gt;
+            </div>
+            
+            <h3>Customer Support Portal</h3>
+            <div class="code-block">
+&lt;!-- Inline support chat --&gt;
+&lt;div id="support-chat" style="height: 600px;"&gt;
+  &lt;div id="ecb-chatbot-support-bot"&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;script&gt;
+window.ECBWidgetConfig = {
+  botId: 'support-bot-456',
+  embedStyle: 'inline',
+  theme: 'minimal',
+  primaryColor: '#3b82f6',
+  welcomeMessage: 'How can we help you today?',
+  persistSession: true,
+  
+  // Custom styling
+  customCSS: `
+    .ecb-widget {
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+    }
+  `
+};
+&lt;/script&gt;
+&lt;script async src="/cdn/ecb-widget/v2/widget.min.js"&gt;&lt;/script&gt;
+            </div>
+            
+            <h3>Mobile App WebView</h3>
+            <div class="code-block">
+&lt;!-- Full-screen mobile chat --&gt;
+&lt;script&gt;
+window.ECBWidgetConfig = {
+  botId: 'mobile-bot-789',
+  embedStyle: 'fullscreen',
+  theme: 'modern',
+  primaryColor: '#8b5cf6',
+  autoOpen: true,
+  
+  // Mobile-optimized settings
+  enableFileUpload: true,
+  enableEmojis: true,
+  
+  onReady: () => {
+    // Notify native app that chat is ready
+    if (window.ReactNativeWebView) {
+      window.ReactNativeWebView.postMessage('chat_ready');
+    }
+  }
+};
+&lt;/script&gt;
+&lt;script async src="/cdn/ecb-widget/v2/widget.min.js"&gt;&lt;/script&gt;
+            </div>
+            
+            <h3>React Application</h3>
+            <div class="code-block">
+import React from 'react';
+import { ECBChatWidget } from '@ecb/react-chatbot-widget';
+
+function CustomerSupport() {
+  const handleMessage = (message, response) => {
+    // Log conversations for analytics
+    console.log('Customer interaction:', { message, response });
+  };
+
+  return (
+    &lt;div className="support-section"&gt;
+      &lt;h2&gt;Need Help?&lt;/h2&gt;
+      &lt;ECBChatWidget
+        botId="react-bot-101"
+        theme="modern"
+        primaryColor="#f59e0b"
+        embedStyle="inline"
+        width={400}
+        height={500}
+        onMessage={handleMessage}
+        welcomeMessage="Hello! I'm here to help with any questions."
+        enableSuggestions={true}
+      /&gt;
+    &lt;/div&gt;
+  );
+}
+
+export default CustomerSupport;
+            </div>
+        </div>
+        
+        <!-- API Reference Tab -->
+        <div id="api" class="tab-content">
+            <h2>🔌 API Reference</h2>
+            
+            <h3>Widget Class Methods</h3>
+            
+            <div class="method-card">
+                <h4><code>new ECBWidget(config)</code></h4>
+                <p>Creates a new widget instance with the provided configuration.</p>
+                <div class="code-block">
+const widget = new ECBWidget({
+  botId: 'your-bot-id',
+  theme: 'modern'
+});
+                </div>
+            </div>
+            
+            <div class="method-card">
+                <h4><code>widget.openChat()</code></h4>
+                <p>Programmatically open the chat widget.</p>
+                <div class="code-block">
+// Open chat when user clicks a button
+document.getElementById('help-button').onclick = () => {
+  widget.openChat();
+};
+                </div>
+            </div>
+            
+            <div class="method-card">
+                <h4><code>widget.closeChat()</code></h4>
+                <p>Programmatically close the chat widget.</p>
+            </div>
+            
+            <div class="method-card">
+                <h4><code>widget.clearHistory()</code></h4>
+                <p>Clear the conversation history and start fresh.</p>
+            </div>
+            
+            <div class="method-card">
+                <h4><code>widget.updateConfig(newConfig)</code></h4>
+                <p>Update widget configuration dynamically.</p>
+                <div class="code-block">
+// Change theme based on user preference
+widget.updateConfig({
+  theme: 'dark',
+  primaryColor: '#1f2937'
+});
+                </div>
+            </div>
+            
+            <div class="method-card">
+                <h4><code>widget.destroy()</code></h4>
+                <p>Remove the widget from the page and clean up resources.</p>
+            </div>
+            
+            <h3>REST API Endpoints</h3>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Endpoint</th>
+                        <th>Method</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>/api/v2/chat/{botId}</code></td>
+                        <td>POST</td>
+                        <td>Send a message to the chatbot</td>
+                    </tr>
+                    <tr>
+                        <td><code>/v2/bot/{botId}/embed-config</code></td>
+                        <td>GET</td>
+                        <td>Get widget configuration</td>
+                    </tr>
+                    <tr>
+                        <td><code>/v2/bot/{botId}/embed-code</code></td>
+                        <td>GET</td>
+                        <td>Generate embed code</td>
+                    </tr>
+                    <tr>
+                        <td><code>/v2/bot/{botId}/health</code></td>
+                        <td>GET</td>
+                        <td>Check bot health status</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h3>Webhook Events</h3>
+            <p>Configure webhooks to receive real-time events from your chatbot:</p>
+            
+            <div class="code-block">
+// Event types:
+- message.sent      // User sent a message
+- message.received  // Bot responded
+- chat.opened       // User opened chat
+- chat.closed       // User closed chat
+- error.occurred    // An error happened
+
+// Webhook payload example:
+{
+  "event": "message.sent",
+  "botId": "your-bot-id",
+  "sessionId": "session-123",
+  "timestamp": "2024-01-01T12:00:00Z",
+  "data": {
+    "message": "Hello there!",
+    "userId": "user-456"
+  }
+}
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function showTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active class from all nav tabs
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked nav tab
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html> 

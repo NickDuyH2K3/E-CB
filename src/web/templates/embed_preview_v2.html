@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ bot.name }} - Embed Preview v2</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #10b981 0%, #6366f1 100%);
+            min-height: 100vh;
+        }
+        .preview-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .preview-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e0e7ef;
+        }
+        .preview-header .badge {
+            background: #10b981;
+            color: white;
+            font-size: 1rem;
+            padding: 6px 16px;
+            border-radius: 20px;
+            margin-left: 10px;
+        }
+        .preview-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+        .tab-button {
+            padding: 10px 20px;
+            border: none;
+            background: #f0f0f0;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .tab-button.active {
+            background: #10b981;
+            color: white;
+        }
+        .preview-content {
+            min-height: 600px;
+            position: relative;
+        }
+        .sample-website {
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            height: 500px;
+            background: white;
+            position: relative;
+            overflow: hidden;
+        }
+        .sample-header {
+            background: #f8f9fa;
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+            font-weight: bold;
+        }
+        .sample-content {
+            padding: 20px;
+        }
+        .instructions {
+            background: #e7f3ff;
+            border: 1px solid #10b981;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .embed-info {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255,255,255,0.9);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            color: #10b981;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <a href="{{ url_for('config_routes.bot_settings', bot_id=bot_id) }}" class="back-button">
+        ← Back to Settings
+    </a>
+    <div class="preview-container">
+        <div class="preview-header">
+            <h1>{{ bot.name }} - Embed Preview <span class="badge">v2 Modern</span></h1>
+            <p>This is how your chatbot will appear when embedded using the <b>v2 Modern</b> integration.</p>
+        </div>
+        <div class="instructions">
+            <h4>📋 How to Use This Preview</h4>
+            <p>
+                1. Switch between "Popup" and "Inline" tabs to see different v2 embed styles<br>
+                2. Test your chatbot by clicking the chat button or typing messages<br>
+                3. Copy the v2 embed code from the settings page to use on your website<br>
+                4. <a href="/docs/embedding" target="_blank">Read v2 Embedding Documentation</a>
+            </p>
+        </div>
+        <div class="preview-tabs">
+            <button class="tab-button active" onclick="showV2Preview('popup')">Popup Style</button>
+            <button class="tab-button" onclick="showV2Preview('inline')">Inline Style</button>
+        </div>
+        <div class="preview-content">
+            <!-- Popup Preview -->
+            <div id="popup-preview-v2" class="sample-website">
+                <div class="sample-header">
+                    Sample Website - Popup Chat Integration (v2)
+                </div>
+                <div class="sample-content">
+                    <h2>Welcome to Our Sample Website</h2>
+                    <p>This is a sample website demonstrating how your chatbot will appear in <b>v2 popup</b> mode.</p>
+                    <p>Look for the chat button in the bottom-right corner! 👇</p>
+                    <h3>About Our Services</h3>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                    <h3>Contact Information</h3>
+                    <p>Feel free to use the chat widget to get in touch with us!</p>
+                </div>
+                <!-- Embedded chatbot (popup style, v2) -->
+                <div id="ecb-chatbot-{{ bot_id }}-v2-popup" data-ecb-config='{{ bot.settings | tojson | safe }}'></div>
+            </div>
+            <!-- Inline Preview -->
+            <div id="inline-preview-v2" class="sample-website" style="display: none;">
+                <div class="sample-header">
+                    Sample Website - Inline Chat Integration (v2)
+                </div>
+                <div class="sample-content" style="display: flex; gap: 20px; height: calc(100% - 60px);">
+                    <div style="flex: 1;">
+                        <h2>Welcome to Our Sample Website</h2>
+                        <p>This demonstrates <b>v2 inline</b> chat integration.</p>
+                        <h3>Our Services</h3>
+                        <ul>
+                            <li>Customer Support</li>
+                            <li>Product Information</li>
+                            <li>Technical Assistance</li>
+                        </ul>
+                        <p>Use the chat widget on the right to get help! →</p>
+                    </div>
+                    <div style="flex: 1; min-width: 350px; position:relative;">
+                        <!-- Embedded chatbot (inline style, v2) -->
+                        <div id="ecb-chatbot-{{ bot_id }}-v2-inline" data-ecb-config='{{ bot.settings | tojson | safe }}'></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="embed-info">
+            <h4>🔧 Integration Information (v2)</h4>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div>
+                    <strong>Bot ID:</strong> {{ bot_id }}<br>
+                    <strong>API Endpoint:</strong> <code>/api/v2/chat/{{ bot_id }}</code><br>
+                    <strong>Status Check:</strong> <code>/v2/bot/{{ bot_id }}/health</code>
+                </div>
+                <div>
+                    <strong>Embed Styles:</strong> Popup, Inline, Iframe, React, Vue, Angular<br>
+                    <strong>Customizable:</strong> Colors, Messages, Themes, Features<br>
+                    <strong>Responsive:</strong> Mobile & Desktop Ready
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Load the v2 widget SDK -->
+    <script>
+        // Helper to get config from data attribute or use defaults
+        function getV2Config(style) {
+            var config = JSON.parse(document.getElementById('ecb-chatbot-{{ bot_id }}-v2-' + style).getAttribute('data-ecb-config'));
+            config.botId = '{{ bot_id }}';
+            config.embedStyle = style;
+            config.apiUrl = '/api/v2/chat/{{ bot_id }}';
+            config.cdnUrl = '/cdn/ecb-widget/v2';
+            return config;
+        }
+        // Load widget for both popup and inline
+        function loadV2Widgets() {
+            var script = document.createElement('script');
+            script.src = '/cdn/ecb-widget/v2/widget.min.js';
+            script.onload = function() {
+                window.popupWidgetV2 = new ECBWidget(getV2Config('popup'));
+                window.inlineWidgetV2 = new ECBWidget(getV2Config('inline'));
+            };
+            document.head.appendChild(script);
+        }
+        // Tab logic
+        function showV2Preview(style) {
+            // Hide both previews
+            document.getElementById('popup-preview-v2').style.display = 'none';
+            document.getElementById('inline-preview-v2').style.display = 'none';
+            // Show selected
+            document.getElementById(style + '-preview-v2').style.display = '';
+            // Update tab button active state
+            var buttons = document.querySelectorAll('.tab-button');
+            buttons.forEach(function(btn) {
+                btn.classList.remove('active');
+            });
+            if (style === 'popup') {
+                buttons[0].classList.add('active');
+            } else {
+                buttons[1].classList.add('active');
+            }
+        }
+        // On load
+        window.addEventListener('DOMContentLoaded', function() {
+            loadV2Widgets();
+            showV2Preview('popup'); // Default to popup
+        });
+    </script>
+</body>
+</html> 

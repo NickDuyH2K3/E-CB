@@ -244,19 +244,17 @@
             </div>
         </div>
 
-        <!-- Embed Code Section -->
+        <!-- Embed Code Section (v1) -->
         <div class="row">
             <div class="col-12">
                 <div class="settings-section">
                     <div class="settings-header">
                         <i class="fas fa-code"></i>
-                        <h3>Embed Your Chatbot</h3>
+                        <h3>Embed Your Chatbot <span class="badge bg-secondary">v1 (Legacy)</span></h3>
                     </div>
-                    
                     <div class="row">
                         <div class="col-lg-8">
                             <p>Copy this code and paste it into any website where you want your chatbot to appear:</p>
-                            
                             <div class="mb-3">
                                 <button class="btn btn-secondary me-2" onclick="generateEmbedCode()">
                                     <i class="fas fa-refresh"></i> Generate Embed Code
@@ -265,23 +263,20 @@
                                     <i class="fas fa-copy"></i> Copy Code
                                 </button>
                             </div>
-                            
                             <div class="embed-code-container" id="embed-code-container">
                                 <div class="text-muted">Click "Generate Embed Code" to see the embed code here.</div>
                             </div>
                         </div>
-                        
                         <div class="col-lg-4">
                             <div class="preview-container">
-                                <h5>Preview</h5>
+                                <h5>Preview (v1)</h5>
                                 <p class="text-muted">A preview of your chatbot will appear here after generating the embed code.</p>
-                                <a href="#" class="btn btn-outline-primary" id="preview-link" style="display: none;" target="_blank">
-                                    <i class="fas fa-external-link-alt"></i> Open Full Preview
+                                <a href="{{ url_for('embed_routes.embed_preview', bot_id=bot_id) }}" class="btn btn-outline-primary" id="preview-link" target="_blank">
+                                    <i class="fas fa-external-link-alt"></i> Open Full Preview (v1)
                                 </a>
                             </div>
                         </div>
                     </div>
-
                     <div class="row mt-3">
                         <div class="col-12">
                             <div class="alert alert-info">
@@ -289,6 +284,46 @@
                                 <p><strong>API Endpoint:</strong> <code>{{ request.url_root }}api/chat/{{ bot_id }}</code></p>
                                 <p><strong>Bot Status API:</strong> <code>{{ request.url_root }}api/bot/{{ bot_id }}/status</code></p>
                                 <p><strong>Documentation:</strong> <a href="#" target="_blank">View API Documentation</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Embed Code Section (v2) -->
+        <div class="row">
+            <div class="col-12">
+                <div class="settings-section">
+                    <div class="settings-header">
+                        <i class="fas fa-code-branch"></i>
+                        <h3>Embed v2 (Modern) <span class="badge bg-success">v2</span></h3>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <p>Use the new, modern embed code for more features and better integration. Choose your method below:</p>
+                            <div class="mb-3">
+                                <button class="btn btn-success me-2" onclick="generateEmbedCodeV2()">
+                                    <i class="fas fa-refresh"></i> Generate v2 Embed Code
+                                </button>
+                                <button class="btn btn-outline-success" onclick="copyEmbedCodeV2()">
+                                    <i class="fas fa-copy"></i> Copy Code
+                                </button>
+                            </div>
+                            <div class="embed-code-container" id="embed-code-container-v2">
+                                <div class="text-muted">Click "Generate v2 Embed Code" to see the embed code here.</div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="preview-container">
+                                <h5>Preview (v2)</h5>
+                                <p class="text-muted">A preview of your chatbot using the new embed will appear here.</p>
+                                <a href="/v2/bot/{{ bot_id }}/embed-preview" class="btn btn-outline-success" id="preview-link-v2" target="_blank">
+                                    <i class="fas fa-external-link-alt"></i> Open Full Preview (v2)
+                                </a>
+                                <a href="/docs/embedding" class="btn btn-link mt-2" target="_blank">
+                                    <i class="fas fa-book"></i> v2 Embedding Documentation
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -456,6 +491,37 @@
             } else {
                 showAlert('Please generate embed code first.', 'warning');
             }
+        }
+
+        function generateEmbedCodeV2() {
+            const botId = '{{ bot_id }}';
+            fetch(`/v2/bot/${botId}/embed-code`)
+                .then(response => response.json())
+                .then(data => {
+                    const codes = data.embed_codes;
+                    let codeHtml = '';
+                    codeHtml += '<b>Script Tag:</b><br><pre>' + escapeHtml(codes.script_tag) + '</pre>';
+                    codeHtml += '<b>Iframe:</b><br><pre>' + escapeHtml(codes.iframe) + '</pre>';
+                    codeHtml += '<b>React:</b><br><pre>' + escapeHtml(codes.react) + '</pre>';
+                    codeHtml += '<b>Vue:</b><br><pre>' + escapeHtml(codes.vue) + '</pre>';
+                    codeHtml += '<b>Angular:</b><br><pre>' + escapeHtml(codes.angular) + '</pre>';
+                    codeHtml += '<b>NPM:</b><br><pre>' + escapeHtml(codes.npm) + '</pre>';
+                    document.getElementById('embed-code-container-v2').innerHTML = codeHtml;
+                });
+        }
+
+        function copyEmbedCodeV2() {
+            const code = document.getElementById('embed-code-container-v2').innerText;
+            navigator.clipboard.writeText(code).then(function() {
+                alert('v2 Embed code copied to clipboard!');
+            });
+        }
+
+        function escapeHtml(text) {
+            var map = {
+                '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'
+            };
+            return text.replace(/[&<>"']/g, function(m) { return map[m]; });
         }
 
         function showAlert(message, type) {

@@ -7,6 +7,7 @@ from routes.bot_routes import bot_routes
 from routes.chat_routes import chat_routes
 from routes.config_routes import config_routes
 from routes.embed_routes import embed_routes
+from routes.embed_routes_v2 import embed_routes_v2
 
 def create_app():
     """Application factory function"""
@@ -26,6 +27,7 @@ def create_app():
     app.register_blueprint(chat_routes)
     app.register_blueprint(config_routes)
     app.register_blueprint(embed_routes)
+    app.register_blueprint(embed_routes_v2)
     
     return app
 

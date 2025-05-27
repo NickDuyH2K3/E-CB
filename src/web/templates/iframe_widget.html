@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ config.widget.botName }} - Chatbot</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; height: 100vh; overflow: hidden; }
+        .iframe-container { width: 100%; height: 100%; display: flex; flex-direction: column; }
+        .widget-container { flex: 1; position: relative; }
+        .security-indicator {
+            position: absolute; top: 5px; right: 5px; font-size: 10px; color: #666;
+            background: rgba(255,255,255,0.8); padding: 2px 5px; border-radius: 3px; z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <div class="iframe-container">
+        <div class="security-indicator">🔒 Secure</div>
+        <div class="widget-container">
+            <div id="ecb-chatbot-{{ bot_id }}"
+                 data-ecb-config='{{ config.widget | tojson | safe }}'
+                 data-ecb-allowed-domains='{{ config.integration.cors.origins | tojson | safe }}'
+                 data-ecb-cdn='{{ config.cdnUrl | tojson | safe }}'>
+            </div>
+        </div>
+    </div>
+    <script src="/static/embed/iframe-widget.js"></script>
+</body>
+</html>
