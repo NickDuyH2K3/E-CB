@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ bot.name }} - Settings</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .settings-section {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            padding: 20px;
+        }
+        
+        .settings-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f8f9fa;
+        }
+        
+        .settings-header i {
+            font-size: 24px;
+            margin-right: 10px;
+            color: #007bff;
+        }
+        
+        .embed-code-container {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 5px;
+            padding: 15px;
+            font-family: monospace;
+            font-size: 14px;
+            white-space: pre-wrap;
+            word-break: break-all;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .color-preview {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid #dee2e6;
+            display: inline-block;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+        
+        .preview-container {
+            border: 2px dashed #dee2e6;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            background: #f8f9fa;
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('base_routes.index') }}">
+                <i class="fas fa-robot me-2"></i>E-CB Framework
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="{{ url_for('bot_routes.bot_dashboard', bot_id=bot_id) }}">
+                    <i class="fas fa-arrow-left"></i> Back to Dashboard
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-12">
+                <h1><i class="fas fa-cog me-2"></i>{{ bot.name }} - Advanced Settings</h1>
+                <p class="text-muted">Configure your chatbot's behavior, appearance, and integration settings.</p>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- NLU Settings -->
+            <div class="col-lg-6">
+                <div class="settings-section">
+                    <div class="settings-header">
+                        <i class="fas fa-brain"></i>
+                        <h3>Natural Language Understanding</h3>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">NLU Engine</label>
+                        <select class="form-select" id="nlu-type">
+                            <option value="simple" {% if bot.settings.nlu_type == 'simple' %}selected{% endif %}>
+                                Simple Pattern Matching
+                            </option>
+                            <option value="spacy" {% if bot.settings.nlu_type == 'spacy' %}selected{% endif %}>
+                                SpaCy (Advanced)
+                            </option>
+                        </select>
+                        <div class="form-text">Choose the natural language processing engine for your bot.</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="debug-mode" 
+                                   {% if bot.settings.debug %}checked{% endif %}>
+                            <label class="form-check-label" for="debug-mode">
+                                Enable Debug Mode
+                            </label>
+                        </div>
+                        <div class="form-text">Show detailed error information during development.</div>
+                    </div>
+
+                    <button class="btn btn-primary" onclick="updateNLUSettings()">
+                        <i class="fas fa-save"></i> Save NLU Settings
+                    </button>
+                </div>
+            </div>
+
+            <!-- Appearance Settings -->
+            <div class="col-lg-6">
+                <div class="settings-section">
+                    <div class="settings-header">
+                        <i class="fas fa-palette"></i>
+                        <h3>Appearance & Branding</h3>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Bot Display Name</label>
+                        <input type="text" class="form-control" id="bot-display-name" 
+                               value="{{ bot.settings.appearance.bot_name_display }}"
+                               placeholder="Enter bot display name">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Primary Color</label>
+                        <div class="input-group">
+                            <input type="color" class="form-control form-control-color" id="primary-color" 
+                                   value="{{ bot.settings.appearance.primary_color }}" 
+                                   title="Choose your color">
+                            <input type="text" class="form-control" id="primary-color-text" 
+                                   value="{{ bot.settings.appearance.primary_color }}"
+                                   placeholder="#007bff">
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Welcome Message</label>
+                        <textarea class="form-control" id="welcome-message" rows="3" 
+                                  placeholder="Enter the first message users will see">{{ bot.settings.appearance.welcome_message }}</textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Theme</label>
+                        <select class="form-select" id="theme">
+                            <option value="default" {% if bot.settings.appearance.theme == 'default' %}selected{% endif %}>
+                                Default
+                            </option>
+                            <option value="dark" {% if bot.settings.appearance.theme == 'dark' %}selected{% endif %}>
+                                Dark
+                            </option>
+                            <option value="minimal" {% if bot.settings.appearance.theme == 'minimal' %}selected{% endif %}>
+                                Minimal
+                            </option>
+                        </select>
+                    </div>
+
+                    <button class="btn btn-primary" onclick="updateAppearanceSettings()">
+                        <i class="fas fa-save"></i> Save Appearance
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Error Handling Settings -->
+            <div class="col-lg-6">
+                <div class="settings-section">
+                    <div class="settings-header">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h3>Error Handling</h3>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Default Error Response</label>
+                        <textarea class="form-control" id="default-error-response" rows="3" 
+                                  placeholder="Message to show when something goes wrong">{{ bot.settings.error_handling.default_response }}</textarea>
+                        <div class="form-text">This message will be shown when the bot encounters an error.</div>
+                    </div>
+
+                    <button class="btn btn-primary" onclick="updateErrorHandling()">
+                        <i class="fas fa-save"></i> Save Error Settings
+                    </button>
+                </div>
+            </div>
+
+            <!-- Integration Settings -->
+            <div class="col-lg-6">
+                <div class="settings-section">
+                    <div class="settings-header">
+                        <i class="fas fa-plug"></i>
+                        <h3>Integration Settings</h3>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="integration-enabled" 
+                                   {% if bot.settings.integration.enabled %}checked{% endif %}>
+                            <label class="form-check-label" for="integration-enabled">
+                                Enable External Integration
+                            </label>
+                        </div>
+                        <div class="form-text">Allow this bot to be embedded on external websites.</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Embed Style</label>
+                        <select class="form-select" id="embed-style">
+                            <option value="popup" {% if bot.settings.integration.embed_style == 'popup' %}selected{% endif %}>
+                                Popup Chat Button
+                            </option>
+                            <option value="inline" {% if bot.settings.integration.embed_style == 'inline' %}selected{% endif %}>
+                                Inline Chat Window
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Allowed Domains (optional)</label>
+                        <textarea class="form-control" id="allowed-domains" rows="3" 
+                                  placeholder="example.com&#10;mysite.org&#10;(Leave empty to allow all domains)">{% for domain in bot.settings.integration.domains %}{{ domain }}&#10;{% endfor %}</textarea>
+                        <div class="form-text">Restrict embedding to specific domains. One domain per line.</div>
+                    </div>
+
+                    <button class="btn btn-primary" onclick="updateIntegrationSettings()">
+                        <i class="fas fa-save"></i> Save Integration Settings
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Embed Code Section -->
+        <div class="row">
+            <div class="col-12">
+                <div class="settings-section">
+                    <div class="settings-header">
+                        <i class="fas fa-code"></i>
+                        <h3>Embed Your Chatbot</h3>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <p>Copy this code and paste it into any website where you want your chatbot to appear:</p>
+                            
+                            <div class="mb-3">
+                                <button class="btn btn-secondary me-2" onclick="generateEmbedCode()">
+                                    <i class="fas fa-refresh"></i> Generate Embed Code
+                                </button>
+                                <button class="btn btn-outline-primary" onclick="copyEmbedCode()">
+                                    <i class="fas fa-copy"></i> Copy Code
+                                </button>
+                            </div>
+                            
+                            <div class="embed-code-container" id="embed-code-container">
+                                <div class="text-muted">Click "Generate Embed Code" to see the embed code here.</div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-4">
+                            <div class="preview-container">
+                                <h5>Preview</h5>
+                                <p class="text-muted">A preview of your chatbot will appear here after generating the embed code.</p>
+                                <a href="#" class="btn btn-outline-primary" id="preview-link" style="display: none;" target="_blank">
+                                    <i class="fas fa-external-link-alt"></i> Open Full Preview
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <div class="alert alert-info">
+                                <h6><i class="fas fa-info-circle"></i> Integration Information</h6>
+                                <p><strong>API Endpoint:</strong> <code>{{ request.url_root }}api/chat/{{ bot_id }}</code></p>
+                                <p><strong>Bot Status API:</strong> <code>{{ request.url_root }}api/bot/{{ bot_id }}/status</code></p>
+                                <p><strong>Documentation:</strong> <a href="#" target="_blank">View API Documentation</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const botId = '{{ bot_id }}';
+
+        // Color picker synchronization
+        document.getElementById('primary-color').addEventListener('change', function() {
+            document.getElementById('primary-color-text').value = this.value;
+        });
+        
+        document.getElementById('primary-color-text').addEventListener('change', function() {
+            document.getElementById('primary-color').value = this.value;
+        });
+
+        function updateNLUSettings() {
+            const nluType = document.getElementById('nlu-type').value;
+            const debugMode = document.getElementById('debug-mode').checked;
+            
+            fetch(`/bot/${botId}/settings/nlu`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    nlu_type: nluType,
+                    debug: debugMode
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showAlert('NLU settings updated successfully!', 'success');
+                } else {
+                    showAlert('Error updating NLU settings: ' + data.error, 'danger');
+                }
+            })
+            .catch(error => {
+                showAlert('Error: ' + error.message, 'danger');
+            });
+        }
+
+        function updateAppearanceSettings() {
+            const appearanceData = {
+                bot_name_display: document.getElementById('bot-display-name').value,
+                primary_color: document.getElementById('primary-color').value,
+                welcome_message: document.getElementById('welcome-message').value,
+                theme: document.getElementById('theme').value
+            };
+            
+            fetch(`/bot/${botId}/settings/appearance`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(appearanceData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showAlert('Appearance settings updated successfully!', 'success');
+                } else {
+                    showAlert('Error updating appearance settings: ' + data.error, 'danger');
+                }
+            })
+            .catch(error => {
+                showAlert('Error: ' + error.message, 'danger');
+            });
+        }
+
+        function updateErrorHandling() {
+            const errorData = {
+                default_response: document.getElementById('default-error-response').value
+            };
+            
+            fetch(`/bot/${botId}/settings/error-handling`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(errorData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showAlert('Error handling settings updated successfully!', 'success');
+                } else {
+                    showAlert('Error updating error handling settings: ' + data.error, 'danger');
+                }
+            })
+            .catch(error => {
+                showAlert('Error: ' + error.message, 'danger');
+            });
+        }
+
+        function updateIntegrationSettings() {
+            const domains = document.getElementById('allowed-domains').value
+                .split('\n')
+                .map(d => d.trim())
+                .filter(d => d.length > 0);
+            
+            const integrationData = {
+                enabled: document.getElementById('integration-enabled').checked,
+                embed_style: document.getElementById('embed-style').value,
+                domains: domains
+            };
+            
+            fetch(`/bot/${botId}/settings/integration`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(integrationData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showAlert('Integration settings updated successfully!', 'success');
+                } else {
+                    showAlert('Error updating integration settings: ' + data.error, 'danger');
+                }
+            })
+            .catch(error => {
+                showAlert('Error: ' + error.message, 'danger');
+            });
+        }
+
+        function generateEmbedCode() {
+            fetch(`/bot/${botId}/embed-code`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.embed_code) {
+                    document.getElementById('embed-code-container').textContent = data.embed_code;
+                    
+                    // Show preview link
+                    const previewLink = document.getElementById('preview-link');
+                    previewLink.href = data.preview_url;
+                    previewLink.style.display = 'inline-block';
+                    
+                    showAlert('Embed code generated successfully!', 'success');
+                } else {
+                    showAlert('Error generating embed code: ' + data.error, 'danger');
+                }
+            })
+            .catch(error => {
+                showAlert('Error: ' + error.message, 'danger');
+            });
+        }
+
+        function copyEmbedCode() {
+            const embedCode = document.getElementById('embed-code-container').textContent;
+            
+            if (embedCode && !embedCode.includes('Click "Generate Embed Code"')) {
+                navigator.clipboard.writeText(embedCode).then(() => {
+                    showAlert('Embed code copied to clipboard!', 'success');
+                }).catch(() => {
+                    showAlert('Failed to copy embed code. Please copy manually.', 'warning');
+                });
+            } else {
+                showAlert('Please generate embed code first.', 'warning');
+            }
+        }
+
+        function showAlert(message, type) {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
+            alertDiv.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            
+            document.querySelector('.container').insertBefore(alertDiv, document.querySelector('.row'));
+            
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 5000);
+        }
+    </script>
+</body>
+</html> 

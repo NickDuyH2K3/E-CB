@@ -5,13 +5,19 @@ import os
 from routes.base_routes import base_routes
 from routes.bot_routes import bot_routes
 from routes.chat_routes import chat_routes
+from routes.config_routes import config_routes
+from routes.embed_routes import embed_routes
+from config import config
 
-def create_app():
+def create_app(config_name=None):
     """Application factory function"""
     app = Flask(__name__)
     
-    # Configuration
-    app.secret_key = os.environ.get('SECRET_KEY', 'your_secret_key_here')
+    # Load configuration
+    config_name = config_name or os.environ.get('FLASK_ENV', 'development')
+    app.config.from_object(config[config_name])
+    
+    # Set bots directory
     app.config['BOTS_DIRECTORY'] = os.path.join(app.root_path, 'bots')
     
     # Ensure bots directory exists
@@ -21,6 +27,8 @@ def create_app():
     app.register_blueprint(base_routes)
     app.register_blueprint(bot_routes)
     app.register_blueprint(chat_routes)
+    app.register_blueprint(config_routes)
+    app.register_blueprint(embed_routes)
     
     return app
 
@@ -28,4 +36,5 @@ def create_app():
 app = create_app()
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    # Development server
+    app.run(debug=True, host='0.0.0.0', port=5000)

@@ -19,6 +19,7 @@
             <div class="action-buttons">
                 <a href="{{ url_for('bot_routes.edit_intents', bot_id=bot_id) }}" class="button">Manage Intents</a>
                 <a href="{{ url_for('bot_routes.edit_responses', bot_id=bot_id) }}" class="button">Manage Responses</a>
+                <a href="{{ url_for('config_routes.bot_settings', bot_id=bot_id) }}" class="button">Advanced Settings</a>
                 <a href="{{ url_for('bot_routes.chat_interface', bot_id=bot_id) }}" class="button">Open Chat</a>
             </div>
         </div>

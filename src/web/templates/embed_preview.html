@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ bot.name }} - Embed Preview</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .preview-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        .preview-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .preview-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+        
+        .tab-button {
+            padding: 10px 20px;
+            border: none;
+            background: #f0f0f0;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .tab-button.active {
+            background: #007bff;
+            color: white;
+        }
+        
+        .preview-content {
+            min-height: 600px;
+            position: relative;
+        }
+        
+        .sample-website {
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            height: 500px;
+            background: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .sample-header {
+            background: #f8f9fa;
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+            font-weight: bold;
+        }
+        
+        .sample-content {
+            padding: 20px;
+        }
+        
+        .instructions {
+            background: #e7f3ff;
+            border: 1px solid #007bff;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .embed-info {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255,255,255,0.9);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            color: #007bff;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <a href="{{ url_for('config_routes.bot_settings', bot_id=bot_id) }}" class="back-button">
+        ← Back to Settings
+    </a>
+
+    <div class="preview-container">
+        <div class="preview-header">
+            <h1>{{ bot.name }} - Embed Preview</h1>
+            <p>This is how your chatbot will appear when embedded on external websites.</p>
+        </div>
+
+        <div class="instructions">
+            <h4>📋 How to Use This Preview</h4>
+            <p>
+                1. Switch between "Popup" and "Inline" tabs to see different embed styles<br>
+                2. Test your chatbot by clicking the chat button or typing messages<br>
+                3. Copy the embed code from the settings page to use on your website
+            </p>
+        </div>
+
+        <div class="preview-tabs">
+            <button class="tab-button active" onclick="showPreview('popup')">
+                Popup Style
+            </button>
+            <button class="tab-button" onclick="showPreview('inline')">
+                Inline Style
+            </button>
+        </div>
+
+        <div class="preview-content">
+            <!-- Popup Preview -->
+            <div id="popup-preview" class="sample-website">
+                <div class="sample-header">
+                    Sample Website - Popup Chat Integration
+                </div>
+                <div class="sample-content">
+                    <h2>Welcome to Our Sample Website</h2>
+                    <p>This is a sample website demonstrating how your chatbot will appear in popup mode.</p>
+                    <p>Look for the chat button in the bottom-right corner! 👇</p>
+                    
+                    <h3>About Our Services</h3>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                    
+                    <h3>Contact Information</h3>
+                    <p>Feel free to use the chat widget to get in touch with us!</p>
+                </div>
+                
+                <!-- Embedded chatbot (popup style) -->
+                <div id="ecb-chatbot-{{ bot_id }}-popup"></div>
+            </div>
+
+            <!-- Inline Preview -->
+            <div id="inline-preview" class="sample-website" style="display: none;">
+                <div class="sample-header">
+                    Sample Website - Inline Chat Integration
+                </div>
+                <div class="sample-content" style="display: flex; gap: 20px; height: calc(100% - 60px);">
+                    <div style="flex: 1;">
+                        <h2>Welcome to Our Sample Website</h2>
+                        <p>This demonstrates inline chat integration.</p>
+                        
+                        <h3>Our Services</h3>
+                        <ul>
+                            <li>Customer Support</li>
+                            <li>Product Information</li>
+                            <li>Technical Assistance</li>
+                        </ul>
+                        
+                        <p>Use the chat widget on the right to get help! →</p>
+                    </div>
+                    
+                    <div style="flex: 1; min-width: 350px;">
+                        <!-- Embedded chatbot (inline style) -->
+                        <div id="ecb-chatbot-{{ bot_id }}-inline"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="embed-info">
+            <h4>🔧 Integration Information</h4>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div>
+                    <strong>Bot ID:</strong> {{ bot_id }}<br>
+                    <strong>API Endpoint:</strong> <code>/api/chat/{{ bot_id }}</code><br>
+                    <strong>Status Check:</strong> <code>/api/bot/{{ bot_id }}/status</code>
+                </div>
+                <div>
+                    <strong>Embed Styles:</strong> Popup, Inline<br>
+                    <strong>Customizable:</strong> Colors, Messages, Themes<br>
+                    <strong>Responsive:</strong> Mobile & Desktop Ready
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const botConfig = {
+            botId: '{{ bot_id }}',
+            apiUrl: '{{ request.url_root }}api/chat/{{ bot_id }}',
+            theme: '{{ bot.settings.appearance.theme or "default" }}',
+            primaryColor: '{{ bot.settings.appearance.primary_color or "#007bff" }}',
+            botName: '{{ bot.settings.appearance.bot_name_display or bot.name }}',
+            welcomeMessage: '{{ bot.settings.appearance.welcome_message or "Hello! How can I help you today?" }}'
+        };
+
+        function showPreview(style) {
+            // Update tab buttons
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Show/hide preview sections
+            if (style === 'popup') {
+                document.getElementById('popup-preview').style.display = 'block';
+                document.getElementById('inline-preview').style.display = 'none';
+                
+                // Initialize popup chatbot if not already done
+                if (!window.popupInitialized) {
+                    initializeChatbot('popup');
+                    window.popupInitialized = true;
+                }
+            } else {
+                document.getElementById('popup-preview').style.display = 'none';
+                document.getElementById('inline-preview').style.display = 'block';
+                
+                // Initialize inline chatbot if not already done
+                if (!window.inlineInitialized) {
+                    initializeChatbot('inline');
+                    window.inlineInitialized = true;
+                }
+            }
+        }
+
+        function initializeChatbot(style) {
+            const containerId = `ecb-chatbot-{{ bot_id }}-${style}`;
+            const container = document.getElementById(containerId);
+            
+            if (!container) return;
+
+            const config = { ...botConfig, embedStyle: style };
+
+            if (style === 'popup') {
+                createPopupWidget(container, config);
+            } else {
+                createInlineWidget(container, config);
+            }
+
+            attachEventListeners(style, config);
+        }
+
+        function createPopupWidget(container, config) {
+            container.innerHTML = `
+                <div id="ecb-chat-button-popup-${config.botId}" style="
+                    position: fixed;
+                    bottom: 20px;
+                    right: 20px;
+                    width: 60px;
+                    height: 60px;
+                    background-color: ${config.primaryColor};
+                    border-radius: 50%;
+                    cursor: pointer;
+                    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    z-index: 1000;
+                    color: white;
+                    font-size: 24px;
+                ">💬</div>
+                
+                <div id="ecb-chat-window-popup-${config.botId}" style="
+                    position: fixed;
+                    bottom: 90px;
+                    right: 20px;
+                    width: 350px;
+                    height: 500px;
+                    background: white;
+                    border-radius: 10px;
+                    box-shadow: 0 5px 30px rgba(0,0,0,0.3);
+                    display: none;
+                    flex-direction: column;
+                    z-index: 1001;
+                    font-family: Arial, sans-serif;
+                ">
+                    <div style="
+                        background-color: ${config.primaryColor};
+                        color: white;
+                        padding: 15px;
+                        border-radius: 10px 10px 0 0;
+                        font-weight: bold;
+                    ">${config.botName}</div>
+                    
+                    <div id="ecb-chat-messages-popup-${config.botId}" style="
+                        flex: 1;
+                        padding: 10px;
+                        overflow-y: auto;
+                        border-bottom: 1px solid #eee;
+                    ">
+                        <div class="ecb-message ecb-bot-message">${config.welcomeMessage}</div>
+                    </div>
+                    
+                    <div style="display: flex; padding: 10px;">
+                        <input type="text" id="ecb-message-input-popup-${config.botId}" placeholder="Type your message..." style="
+                            flex: 1;
+                            padding: 10px;
+                            border: 1px solid #ddd;
+                            border-radius: 20px;
+                            outline: none;
+                        ">
+                        <button id="ecb-send-button-popup-${config.botId}" style="
+                            margin-left: 10px;
+                            padding: 10px 15px;
+                            background-color: ${config.primaryColor};
+                            color: white;
+                            border: none;
+                            border-radius: 20px;
+                            cursor: pointer;
+                        ">Send</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function createInlineWidget(container, config) {
+            container.innerHTML = `
+                <div id="ecb-chat-window-inline-${config.botId}" style="
+                    width: 100%;
+                    height: 100%;
+                    background: white;
+                    border: 1px solid #ddd;
+                    border-radius: 10px;
+                    display: flex;
+                    flex-direction: column;
+                    font-family: Arial, sans-serif;
+                ">
+                    <div style="
+                        background-color: ${config.primaryColor};
+                        color: white;
+                        padding: 15px;
+                        border-radius: 10px 10px 0 0;
+                        font-weight: bold;
+                    ">${config.botName}</div>
+                    
+                    <div id="ecb-chat-messages-inline-${config.botId}" style="
+                        flex: 1;
+                        padding: 10px;
+                        overflow-y: auto;
+                        border-bottom: 1px solid #eee;
+                    ">
+                        <div class="ecb-message ecb-bot-message">${config.welcomeMessage}</div>
+                    </div>
+                    
+                    <div style="display: flex; padding: 10px;">
+                        <input type="text" id="ecb-message-input-inline-${config.botId}" placeholder="Type your message..." style="
+                            flex: 1;
+                            padding: 10px;
+                            border: 1px solid #ddd;
+                            border-radius: 20px;
+                            outline: none;
+                        ">
+                        <button id="ecb-send-button-inline-${config.botId}" style="
+                            margin-left: 10px;
+                            padding: 10px 15px;
+                            background-color: ${config.primaryColor};
+                            color: white;
+                            border: none;
+                            border-radius: 20px;
+                            cursor: pointer;
+                        ">Send</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function attachEventListeners(style, config) {
+            const chatButton = document.getElementById(`ecb-chat-button-${style}-${config.botId}`);
+            const chatWindow = document.getElementById(`ecb-chat-window-${style}-${config.botId}`);
+            const sendButton = document.getElementById(`ecb-send-button-${style}-${config.botId}`);
+            const messageInput = document.getElementById(`ecb-message-input-${style}-${config.botId}`);
+
+            if (chatButton) {
+                chatButton.onclick = function() {
+                    const isVisible = chatWindow.style.display === 'flex';
+                    chatWindow.style.display = isVisible ? 'none' : 'flex';
+                };
+            }
+
+            if (sendButton) {
+                sendButton.onclick = () => sendMessage(style, config);
+            }
+
+            if (messageInput) {
+                messageInput.onkeypress = function(e) {
+                    if (e.key === 'Enter') {
+                        sendMessage(style, config);
+                    }
+                };
+            }
+        }
+
+        function sendMessage(style, config) {
+            const messageInput = document.getElementById(`ecb-message-input-${style}-${config.botId}`);
+            const message = messageInput.value.trim();
+
+            if (!message) return;
+
+            addMessage(message, 'user', style, config);
+            messageInput.value = '';
+
+            // Simulate API call (in real implementation, this would call the actual API)
+            setTimeout(() => {
+                const responses = [
+                    "Thank you for your message! This is a preview of how your chatbot will respond.",
+                    "I'm a preview version of your chatbot. In the live version, I'll use your configured responses.",
+                    "Hello! This preview demonstrates how your embedded chatbot will work.",
+                    "Great question! Your actual chatbot will be much smarter with your trained responses."
+                ];
+                const response = responses[Math.floor(Math.random() * responses.length)];
+                addMessage(response, 'bot', style, config);
+            }, 1000);
+        }
+
+        function addMessage(text, sender, style, config) {
+            const messagesContainer = document.getElementById(`ecb-chat-messages-${style}-${config.botId}`);
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'ecb-message ecb-' + sender + '-message';
+            messageDiv.style.cssText = `
+                margin: 5px 0;
+                padding: 8px 12px;
+                border-radius: 15px;
+                max-width: 80%;
+                word-wrap: break-word;
+                animation: fadeIn 0.3s ease-in;
+                display: inline-block;
+                ${sender === 'user' ? 
+                    'background-color: ' + config.primaryColor + '; color: white; margin-left: auto; float: right; clear: both;' : 
+                    'background-color: #f1f1f1; color: black; float: left; clear: both;'
+                }
+            `;
+            messageDiv.textContent = text;
+
+            // Create a wrapper div to handle the floating properly
+            const wrapperDiv = document.createElement('div');
+            wrapperDiv.style.cssText = 'width: 100%; overflow: hidden; margin: 2px 0;';
+            wrapperDiv.appendChild(messageDiv);
+
+            messagesContainer.appendChild(wrapperDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // Initialize popup view by default
+        initializeChatbot('popup');
+        window.popupInitialized = true;
+    </script>
+</body>
+</html> 

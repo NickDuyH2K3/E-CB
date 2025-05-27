@@ -1,0 +1,49 @@
+{
+    "name": "Embedded Bot Test",
+    "description": "Testing embedded",
+    "intents": {
+        "greeting": [
+            "hello",
+            "hi",
+            "hey"
+        ],
+        "farewell": [
+            "bye",
+            "goodbye",
+            "see you"
+        ]
+    },
+    "responses": {
+        "greeting": [
+            "Hello!",
+            "Hi there!"
+        ],
+        "farewell": [
+            "Goodbye!",
+            "See you later!"
+        ],
+        "unknown": [
+            "I don't understand.",
+            "Could you rephrase that?"
+        ]
+    },
+    "settings": {
+        "nlu_type": "spacy",
+        "debug": false,
+        "error_handling": {
+            "default_response": "I'm sorry, I didn't understand that.",
+            "custom_responses": {}
+        },
+        "appearance": {
+            "theme": "dark",
+            "primary_color": "#80ff00",
+            "bot_name_display": "Embedded Bot Test",
+            "welcome_message": "Hello! How can I help you today?"
+        },
+        "integration": {
+            "enabled": true,
+            "domains": [],
+            "embed_style": "popup"
+        }
+    }
+}
