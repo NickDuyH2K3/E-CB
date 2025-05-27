@@ -1,8 +1,22 @@
+:root {
+    /* Color Palette */
+    --primary-color: #da4900;
+    --primary-hover: #b83d00;
+    --secondary-color: #f3f3f3;
+    --accent-color: #ffffff;
+    --text-color: #333;
+    --muted-text: #7f8c8d;
+    --card-bg: #ffffff;
+    --table-header: #ffe1d5;
+    --border-color: #f0d3c7;
+    --box-shadow: rgba(0, 0, 0, 0.05);
+}
+
 body {
     margin: 0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #fdf6fd;
-    color: #333;
+    background-color: var(--secondary-color);
+    color: var(--text-color);
 }
 
 .container {
@@ -12,13 +26,13 @@ body {
 }
 
 h1, h2 {
-    color: #a06ca4;
+    color: var(--primary-color);
 }
 
 .button {
     display: inline-block;
-    background-color: #d9bad7;
-    color: #fff;
+    background-color: var(--primary-color);
+    color: var(--accent-color);
     padding: 10px 16px;
     margin: 8px 4px;
     text-decoration: none;
@@ -28,25 +42,30 @@ h1, h2 {
 }
 
 .button:hover {
-    background-color: #b896b4;
+    background-color: var(--primary-hover);
 }
 
 .button.secondary {
-    background-color: #ccc;
-    color: #333;
+    background-color: var(--card-bg);
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
 }
 
 .button.secondary:hover {
-    background-color: #bbb;
+    background-color: var(--primary-color);
+    color: var(--accent-color);
 }
 
-.bot-details, .bot-management, .bot-intents, .bot-responses {
-    background-color: #fff;
-    border: 1px solid #e3d4e1;
+.bot-details,
+.bot-management,
+.bot-intents,
+.bot-responses {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
     padding: 20px;
     margin-bottom: 20px;
     border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 5px var(--box-shadow);
 }
 
 table {
@@ -55,15 +74,16 @@ table {
     margin-top: 10px;
 }
 
-table th, table td {
+table th,
+table td {
     text-align: left;
     padding: 10px;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid var(--border-color);
 }
 
 table th {
-    background-color: #f3e1f1;
-    color: #333;
+    background-color: var(--table-header);
+    color: var(--text-color);
 }
 
 @media (max-width: 768px) {
@@ -76,7 +96,8 @@ table th {
         margin: 6px 0;
     }
 
-    table th, table td {
+    table th,
+    table td {
         display: block;
         width: 100%;
         text-align: left;
@@ -88,7 +109,7 @@ table th {
 
     table tr {
         margin-bottom: 10px;
-        border-bottom: 2px solid #eee;
+        border-bottom: 2px solid var(--border-color);
         display: block;
     }
 
@@ -103,6 +124,6 @@ table th {
         font-weight: bold;
         display: block;
         margin-bottom: 5px;
-        color: #666;
+        color: var(--muted-text);
     }
 }

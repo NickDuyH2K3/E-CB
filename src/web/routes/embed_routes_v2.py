@@ -426,8 +426,9 @@ def serve_widget_js():
     
     # In production, this should be served from a real CDN
     # For now, we'll serve the unminified version with proper headers
-    
-    with open('D:\E-CB\src\web\static\embed\widget-sdk.js', 'r') as f:
+    # with open('D:\E-CB\src\web\static\embed\widget-sdk.js', 'r') as f:
+
+    with open('D:\Tai Lieu Hoc Phan\DACN3\E-CB\src\web\static\embed\widget-sdk.js', 'r') as f:
         js_content = f.read()
     
     response = make_response(js_content)

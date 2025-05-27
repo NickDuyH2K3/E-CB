@@ -1,0 +1,130 @@
+:root {
+    /* Color Palette */
+    --primary-color: #da4900;
+    --primary-hover: #b83d00;
+    --secondary-color: #f3f3f3;
+    --accent-color: #ffffff;
+    --text-color: #333;
+    --muted-text: #7f8c8d;
+    --card-bg: #ffffff;
+    --table-header: #ffe1d5;
+    --border-color: #f0d3c7;
+    --box-shadow: rgba(0, 0, 0, 0.05);
+    --alert-success-bg: #dff0d8;
+    --alert-success-text: #3c763d;
+    --alert-error-bg: #f2dede;
+    --alert-error-text: #a94442;
+}
+
+/* Body */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: var(--secondary-color);
+    min-height: 100vh;
+}
+
+/* Container */
+.preview-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: var(--card-bg);
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+/* Header */
+.preview-header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid var(--secondary-color);
+}
+
+/* Tabs */
+.preview-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    justify-content: center;
+}
+
+.tab-button {
+    padding: 10px 20px;
+    border: none;
+    background: var(--secondary-color);
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: var(--text-color);
+}
+
+.tab-button.active {
+    background: var(--primary-color);
+    color: var(--accent-color);
+}
+
+/* Content */
+.preview-content {
+    min-height: 600px;
+    position: relative;
+}
+
+/* Sample Website */
+.sample-website {
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    height: 500px;
+    background: var(--card-bg);
+    position: relative;
+    overflow: hidden;
+}
+
+.sample-header {
+    background: var(--secondary-color);
+    padding: 15px;
+    border-bottom: 1px solid var(--border-color);
+    font-weight: bold;
+    color: var(--text-color);
+}
+
+.sample-content {
+    padding: 20px;
+    color: var(--text-color);
+}
+
+/* Instructions Box */
+.instructions {
+    background: var(--border-color); 
+    border: 1px solid var(--primary-color);
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 20px;
+    color: var(--primary-color);
+}
+
+/* Embed Info Box */
+.embed-info {
+    background: var(--secondary-color);
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 20px;
+    color: var(--text-color);
+}
+
+/* Back Button */
+.back-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: rgba(255,255,255,0.9);
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    color: var(--primary-color);
+    font-weight: bold;
+    cursor: pointer;
+}

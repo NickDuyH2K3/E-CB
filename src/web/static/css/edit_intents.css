@@ -1,14 +1,28 @@
+:root {
+    /* Color Palette */
+    --primary-color: #da4900;
+    --primary-hover: #b83d00;
+    --secondary-color: #f3f3f3;
+    --accent-color: #ffffff;
+    --text-color: #333;
+    --muted-text: #7f8c8d;
+    --card-bg: #ffffff;
+    --table-header: #ffe1d5;
+    --border-color: #f0d3c7;
+    --box-shadow: rgba(0, 0, 0, 0.05);
+}
+
 /* Reset and Base Styles */
 body, h1, h2, p, a, label, input, textarea, button {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    color: inherit;
+    color: var(--text-color);
     font-family: Arial, sans-serif;
 }
 
 body {
-    background-color: #fdf6fd;
+    background-color: var(--secondary-color);
     padding: 20px;
 }
 
@@ -16,22 +30,22 @@ body {
 .container {
     max-width: 900px;
     margin: 0 auto;
-    background-color: white;
+    background-color: var(--card-bg);
     padding: 30px;
     border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2px 8px var(--box-shadow);
 }
 
 /* Headings */
 .container h1 {
     font-size: 26px;
-    color: #2c3e50;
+    color: var(--primary-color);
     margin-bottom: 25px;
 }
 
 .container h2 {
     font-size: 20px;
-    color: #2c3e50;
+    color: var(--primary-color);
     margin-top: 30px;
     margin-bottom: 15px;
 }
@@ -45,13 +59,13 @@ table {
 
 table th, table td {
     padding: 12px;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid var(--border-color);
     text-align: left;
 }
 
 table th {
-    background-color: #f3e1f1;
-    color: #333;
+    background-color: var(--table-header);
+    color: var(--text-color);
 }
 
 /* Form Styling */
@@ -67,15 +81,18 @@ label {
     display: block;
     font-weight: bold;
     margin-bottom: 8px;
+    color: var(--text-color);
 }
 
 input[type="text"],
 textarea {
     width: 100%;
     padding: 12px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--border-color);
     border-radius: 6px;
     font-size: 14px;
+    color: var(--text-color);
+    background-color: var(--accent-color);
 }
 
 textarea {
@@ -86,8 +103,8 @@ textarea {
 .button,
 button {
     display: inline-block;
-    background-color: #d9bad7;
-    color: #fff;
+    background-color: var(--primary-color);
+    color: var(--accent-color);
     padding: 10px 18px;
     border: none;
     border-radius: 8px;
@@ -100,17 +117,19 @@ button {
 
 .button:hover,
 button:hover {
-    background-color: #b896b4;
+    background-color: var(--primary-hover);
 }
 
 .button.secondary {
-    background-color: #ccc;
-    color: #333;
+    background-color: var(--card-bg);
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
     margin-right: 10px;
 }
 
 .button.secondary:hover {
-    background-color: #bbb;
+    background-color: var(--primary-color);
+    color: var(--accent-color);
 }
 
 /* Responsive Table */
@@ -126,8 +145,8 @@ button:hover {
 
     table tr {
         margin-bottom: 15px;
-        background-color: #fff;
-        border: 1px solid #ddd;
+        background-color: var(--card-bg);
+        border: 1px solid var(--border-color);
         border-radius: 8px;
         padding: 10px;
     }
@@ -136,7 +155,7 @@ button:hover {
         position: relative;
         padding-left: 50%;
         border: none;
-        border-bottom: 1px solid #eee;
+        border-bottom: 1px solid var(--secondary-color);
     }
 
     table td::before {
@@ -145,7 +164,7 @@ button:hover {
         left: 15px;
         top: 10px;
         font-weight: bold;
-        color: #666;
+        color: var(--muted-text);
         width: 45%;
         white-space: nowrap;
     }

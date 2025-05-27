@@ -1,3 +1,21 @@
+:root {
+    /* Color Palette */
+    --primary-color: #da4900;
+    --primary-hover: #b83d00;
+    --secondary-color: #f3f3f3;
+    --accent-color: #ffffff;
+    --text-color: #333;
+    --muted-text: #7f8c8d;
+    --card-bg: #ffffff;
+    --table-header: #ffe1d5;
+    --border-color: #f0d3c7;
+    --box-shadow: rgba(0, 0, 0, 0.05);
+    --alert-success-bg: #dff0d8;
+    --alert-success-text: #3c763d;
+    --alert-error-bg: #f2dede;
+    --alert-error-text: #a94442;
+}
+
 /* Reset */
 body, h1, p, label, input, textarea, button, a {
     margin: 0;
@@ -9,7 +27,7 @@ body, h1, p, label, input, textarea, button, a {
 
 /* Page background */
 body {
-    background-color: #f5f7fa;
+    background-color: var(--secondary-color);
     padding: 20px;
 }
 
@@ -17,23 +35,23 @@ body {
 .container {
     max-width: 600px;
     margin: 0 auto;
-    background-color: white;
+    background-color: var(--card-bg);
     padding: 30px;
     border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2px 8px var(--box-shadow);
 }
 
 /* Heading */
 .container h1 {
     font-size: 26px;
-    color: #2c3e50;
+    color: #2c3e50; /* màu này không có trong :root, giữ nguyên */
     margin-bottom: 25px;
 }
 
 /* Error message */
 .error {
-    background-color: #f8d7da;
-    color: #721c24;
+    background-color: var(--alert-error-bg);
+    color: var(--alert-error-text);
     padding: 10px 15px;
     border-radius: 6px;
     margin-bottom: 20px;
@@ -48,14 +66,14 @@ body {
     display: block;
     margin-bottom: 8px;
     font-weight: bold;
-    color: #34495e;
+    color: #34495e; /* không có trong :root, giữ nguyên */
 }
 
 .form-group input,
 .form-group textarea {
     width: 100%;
     padding: 12px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--border-color);
     border-radius: 6px;
     font-size: 14px;
     outline: none;
@@ -64,7 +82,7 @@ body {
 
 .form-group input:focus,
 .form-group textarea:focus {
-    border-color: #d9bad7;
+    border-color: var(--primary-color);
 }
 
 /* Buttons */
@@ -85,21 +103,21 @@ body {
 }
 
 .button.primary {
-    background-color: #d9bad7;
-    color: white;
+    background-color: var(--primary-color);
+    color: var(--accent-color);
 }
 
 .button.primary:hover {
-    background-color: #b896b4;
+    background-color: var(--primary-hover);
 }
 
 .button.secondary {
-    background-color: #ecf0f1;
-    color: #2c3e50;
+    background-color: var(--secondary-color);
+    color: #2c3e50; /* giữ nguyên vì không có trong :root */
 }
 
 .button.secondary:hover {
-    background-color: #dcdfe3;
+    background-color: #dcdfe3; /* giữ nguyên */
 }
 
 /* Responsive */

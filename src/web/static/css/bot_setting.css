@@ -1,0 +1,76 @@
+:root {
+    /* Color Palette */
+    --primary-color: #da4900;         /* cho icon và màu chính */
+    --primary-hover: #b83d00;
+    --secondary-color: #f3f3f3;       /* nền phụ, ví dụ background vùng embed, preview */
+    --accent-color: #ffffff;          /* màu trắng */
+    --text-color: #333;
+    --muted-text: #7f8c8d;
+    --card-bg: #ffffff;               /* background chính cho các vùng */
+    --table-header: #ffe1d5;
+    --border-color: #f0d3c7;
+
+    /* Màu bổ sung cho các viền, border chưa có biến */
+    --border-light: #e9ecef;          /* màu viền embed-code-container */
+    --border-lighter: #dee2e6;        /* màu viền preview-container, color-preview */
+
+    --box-shadow: rgba(0, 0, 0, 0.05);
+    --box-shadow-strong: rgba(0, 0, 0, 0.1);
+
+    --alert-success-bg: #dff0d8;
+    --alert-success-text: #3c763d;
+    --alert-error-bg: #f2dede;
+    --alert-error-text: #a94442;
+}
+.settings-section {
+    background: var(--card-bg);
+    border-radius: 10px;
+    box-shadow: 0 2px 10px var(--box-shadow-strong);
+    margin-bottom: 20px;
+    padding: 20px;
+}
+
+.settings-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--secondary-color);
+}
+
+.settings-header i {
+    font-size: 24px;
+    margin-right: 10px;
+    color: var(--primary-color);
+}
+
+.embed-code-container {
+    background: var(--secondary-color);
+    border: 1px solid var(--border-light);
+    border-radius: 5px;
+    padding: 15px;
+    font-family: monospace;
+    font-size: 14px;
+    white-space: pre-wrap;
+    word-break: break-all;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.color-preview {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid var(--border-lighter);
+    display: inline-block;
+    margin-left: 10px;
+    vertical-align: middle;
+}
+
+.preview-container {
+    border: 2px dashed var(--border-lighter);
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    background: var(--secondary-color);
+}

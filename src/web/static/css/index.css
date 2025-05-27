@@ -1,3 +1,17 @@
+:root {
+    /* Color Palette */
+    --primary-color: #da4900;
+    --primary-hover: #b83d00;
+    --secondary-color: #f3f3f3;
+    --accent-color: #ffffff;
+    --text-color: #333;
+    --muted-text: #7f8c8d;
+    --card-bg: #ffffff;
+    --table-header: #ffe1d5;
+    --border-color: #f0d3c7;
+    --box-shadow: rgba(0, 0, 0, 0.05);
+}
+
 /* Reset and Base Styles */
 body, h1, h2, h3, p, a {
     margin: 0;
@@ -9,7 +23,7 @@ body, h1, h2, h3, p, a {
 
 body {
     font-family: Arial, sans-serif;
-    background-color: #fdf6fd;
+    background-color: var(--secondary-color);
     display: flex;
     height: 100vh;
 }
@@ -17,8 +31,8 @@ body {
 /* Sidebar */
 .sidebar {
     width: 220px;
-    background-color: #d9bad7;
-    color: black;
+    background-color: var(--primary-color);
+    color: var(--accent-color);
     padding: 20px;
     display: flex;
     flex-direction: column;
@@ -31,7 +45,7 @@ body {
 
 .sidebar a {
     display: block;
-    color: white;
+    color: var(--accent-color);
     padding: 10px 15px;
     border-radius: 6px;
     margin-bottom: 10px;
@@ -39,7 +53,7 @@ body {
 }
 
 .sidebar a:hover {
-    background-color: #a88ba5;
+    background-color: var(--primary-hover);
 }
 
 /* Main container */
@@ -52,24 +66,23 @@ body {
 .container h1 {
     font-size: 28px;
     margin-bottom: 20px;
-    color: #2c3e50;
+    color: var(--text-color);
 }
 
 .container h2 {
     font-size: 22px;
     margin-top: 30px;
     margin-bottom: 15px;
-    color: #2c3e50;
+    color: var(--text-color);
 }
 
 /* Buttons */
 .button {
     display: inline-block;
-    background-color: #d9bad7;
-    color: #fff;
+    background-color: var(--primary-color);
+    color: var(--accent-color);
     padding: 10px 16px;
     margin: 8px 4px;
-    text-decoration: none;
     border-radius: 8px;
     font-weight: bold;
     font-size: 14px;
@@ -77,12 +90,12 @@ body {
 }
 
 .button:hover {
-    background-color: #b896b4;
+    background-color: var(--primary-hover);
 }
 
 .button.secondary {
     background-color: #ccc;
-    color: #333;
+    color: var(--text-color);
 }
 
 .button.secondary:hover {
@@ -97,28 +110,28 @@ body {
 }
 
 .bot-card {
-    background-color: white;
+    background-color: var(--card-bg);
     border-radius: 10px;
     padding: 20px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 6px var(--box-shadow);
 }
 
 .bot-card h3 {
     margin-bottom: 10px;
     font-size: 18px;
-    color: #34495e;
+    color: var(--text-color);
 }
 
 .bot-card p {
     font-size: 14px;
-    color: #7f8c8d;
+    color: var(--muted-text);
     margin-bottom: 15px;
 }
 
 .bot-actions .button {
     margin-right: 10px;
-    background-color: #d9bad6;
-    color: white;
+    background-color: var(--primary-color);
+    color: var(--accent-color);
     padding: 8px 14px;
     border-radius: 6px;
     font-size: 14px;
@@ -126,7 +139,7 @@ body {
 }
 
 .bot-actions .button:hover {
-    background-color: #b896b4;
+    background-color: var(--primary-hover);
 }
 
 .action-button {
@@ -148,12 +161,12 @@ body {
 
 /* Dashboard Details */
 .bot-details, .bot-management, .bot-intents, .bot-responses {
-    background-color: white;
-    border: 1px solid #e3d4e1;
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
     padding: 20px;
     margin-bottom: 20px;
     border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 5px var(--box-shadow);
 }
 
 /* Tables */
@@ -170,8 +183,8 @@ table th, table td {
 }
 
 table th {
-    background-color: #f3e1f1;
-    color: #333;
+    background-color: var(--table-header);
+    color: var(--text-color);
 }
 
 /* Responsive Design */
