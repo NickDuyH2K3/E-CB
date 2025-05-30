@@ -112,7 +112,7 @@
         <div class="instructions">
             <h4>📋 How to Use This Preview</h4>
             <p>
-                1. Switch between "Popup" and "Inline" tabs to see different v2 embed styles<br>
+                1. Switch between "Popup", "Inline", "Drawer", and "Fullscreen" tabs to see different v2 embed styles<br>
                 2. Test your chatbot by clicking the chat button or typing messages<br>
                 3. Copy the v2 embed code from the settings page to use on your website<br>
                 4. <a href="/docs/embedding" target="_blank">Read v2 Embedding Documentation</a>
@@ -121,6 +121,8 @@
         <div class="preview-tabs">
             <button class="tab-button active" onclick="showV2Preview('popup')">Popup Style</button>
             <button class="tab-button" onclick="showV2Preview('inline')">Inline Style</button>
+            <button class="tab-button" onclick="showV2Preview('drawer')">Drawer Style</button>
+            <button class="tab-button" onclick="showV2Preview('fullscreen')">Fullscreen Style</button>
         </div>
         <div class="preview-content">
             <!-- Popup Preview -->
@@ -138,7 +140,7 @@
                     <p>Feel free to use the chat widget to get in touch with us!</p>
                 </div>
                 <!-- Embedded chatbot (popup style, v2) -->
-                <div id="ecb-chatbot-{{ bot_id }}-v2-popup" data-ecb-config='{{ bot.settings | tojson | safe }}'></div>
+                <div id="ecb-chatbot-popup-{{ bot_id }}" data-embed-style="popup"></div>
             </div>
             <!-- Inline Preview -->
             <div id="inline-preview-v2" class="sample-website" style="display: none;">
@@ -159,9 +161,39 @@
                     </div>
                     <div style="flex: 1; min-width: 350px; position:relative;">
                         <!-- Embedded chatbot (inline style, v2) -->
-                        <div id="ecb-chatbot-{{ bot_id }}-v2-inline" data-ecb-config='{{ bot.settings | tojson | safe }}'></div>
+                        <div id="ecb-chatbot-inline-{{ bot_id }}" data-embed-style="inline" style="height: 100%;"></div>
                     </div>
                 </div>
+            </div>
+            <!-- Drawer Preview -->
+            <div id="drawer-preview-v2" class="sample-website" style="display: none;">
+                <div class="sample-header">
+                    Sample Website - Drawer Chat Integration (v2)
+                </div>
+                <div class="sample-content">
+                    <h2>Welcome to Our Sample Website</h2>
+                    <p>This demonstrates <b>v2 drawer</b> chat integration.</p>
+                    <p>The chat widget will slide in from the side as a drawer.</p>
+                    <h3>Try it out!</h3>
+                    <p>Click the chat button to open the drawer widget.</p>
+                </div>
+                <!-- Embedded chatbot (drawer style, v2) -->
+                <div id="ecb-chatbot-drawer-{{ bot_id }}" data-embed-style="drawer"></div>
+            </div>
+            <!-- Fullscreen Preview -->
+            <div id="fullscreen-preview-v2" class="sample-website" style="display: none;">
+                <div class="sample-header">
+                    Sample Website - Fullscreen Chat Integration (v2)
+                </div>
+                <div class="sample-content">
+                    <h2>Welcome to Our Sample Website</h2>
+                    <p>This demonstrates <b>v2 fullscreen</b> chat integration.</p>
+                    <p>The chat widget will take over the full screen when opened.</p>
+                    <h3>Try it out!</h3>
+                    <p>Click the chat button to open the fullscreen widget.</p>
+                </div>
+                <!-- Embedded chatbot (fullscreen style, v2) -->
+                <div id="ecb-chatbot-fullscreen-{{ bot_id }}" data-embed-style="fullscreen"></div>
             </div>
         </div>
         <div class="embed-info">
@@ -173,7 +205,7 @@
                     <strong>Status Check:</strong> <code>/v2/bot/{{ bot_id }}/health</code>
                 </div>
                 <div>
-                    <strong>Embed Styles:</strong> Popup, Inline, Iframe, React, Vue, Angular<br>
+                    <strong>Embed Styles:</strong> Popup, Inline, Drawer, Fullscreen<br>
                     <strong>Customizable:</strong> Colors, Messages, Themes, Features<br>
                     <strong>Responsive:</strong> Mobile & Desktop Ready
                 </div>
@@ -182,47 +214,120 @@
     </div>
     <!-- Load the v2 widget SDK -->
     <script>
-        // Helper to get config from data attribute or use defaults
+        // Widget instance tracker
+        var currentWidget = null;
+        var currentStyle = null;
+        
+        // Helper to get config for a style
         function getV2Config(style) {
-            var config = JSON.parse(document.getElementById('ecb-chatbot-{{ bot_id }}-v2-' + style).getAttribute('data-ecb-config'));
-            config.botId = '{{ bot_id }}';
-            config.embedStyle = style;
-            config.apiUrl = '/api/v2/chat/{{ bot_id }}';
-            config.cdnUrl = '/cdn/ecb-widget/v2';
-            return config;
+            return {
+                botId: '{{ bot_id }}',
+                embedStyle: style,
+                apiUrl: '/api/v2/chat/{{ bot_id }}',
+                theme: 'modern',
+                primaryColor: '#10b981',
+                welcomeMessage: 'Hello! How can I help you today?',
+                placeholder: 'Type your message...',
+                autoOpen: false,
+                width: style === 'inline' ? '100%' : 350,
+                height: style === 'inline' ? '100%' : 500
+            };
         }
-        // Load widget for both popup and inline
-        function loadV2Widgets() {
+        
+        // Destroy current widget completely
+        function destroyCurrentWidget() {
+            if (currentWidget) {
+                // Remove all widget DOM elements
+                const allWidgets = document.querySelectorAll('.ecb-widget, .ecb-popup-trigger, .ecb-chat-window');
+                allWidgets.forEach(el => el.remove());
+                
+                // Clear all containers
+                ['popup', 'inline', 'drawer', 'fullscreen'].forEach(style => {
+                    const container = document.getElementById(`ecb-chatbot-${style}-{{ bot_id }}`);
+                    if (container) {
+                        container.innerHTML = '';
+                    }
+                });
+                
+                currentWidget = null;
+                currentStyle = null;
+            }
+        }
+        
+        // Create a temporary container with the expected ID for the SDK
+        function createTempContainer(style) {
+            const tempContainer = document.createElement('div');
+            tempContainer.id = 'ecb-chatbot-{{ bot_id }}';
+            
+            // Append to the specific style container
+            const styleContainer = document.getElementById(`ecb-chatbot-${style}-{{ bot_id }}`);
+            if (styleContainer) {
+                styleContainer.appendChild(tempContainer);
+            }
+            
+            return tempContainer;
+        }
+        
+        // Load widget for a given style
+        function loadV2Widget(style) {
+            if (window.ECBWidget) {
+                // Destroy previous widget completely
+                destroyCurrentWidget();
+                
+                // Create temporary container with expected ID
+                createTempContainer(style);
+                
+                // Create new widget
+                try {
+                    currentWidget = new ECBWidget(getV2Config(style));
+                    currentStyle = style;
+                    console.log('Widget created for style:', style);
+                } catch (error) {
+                    console.error('Error creating widget:', error);
+                }
+            } else {
+                console.error('ECBWidget not available');
+            }
+        }
+        
+        // Tab logic
+        function showV2Preview(style) {
+            // Hide all previews
+            ['popup','inline','drawer','fullscreen'].forEach(function(s) {
+                const preview = document.getElementById(s+'-preview-v2');
+                if (preview) preview.style.display = 'none';
+            });
+            
+            // Show selected preview
+            const selectedPreview = document.getElementById(style + '-preview-v2');
+            if (selectedPreview) {
+                selectedPreview.style.display = '';
+            }
+            
+            // Update tab button active state
+            const buttons = document.querySelectorAll('.tab-button');
+            buttons.forEach(function(btn) { btn.classList.remove('active'); });
+            if (style === 'popup') buttons[0].classList.add('active');
+            else if (style === 'inline') buttons[1].classList.add('active');
+            else if (style === 'drawer') buttons[2].classList.add('active');
+            else if (style === 'fullscreen') buttons[3].classList.add('active');
+            
+            // Load widget for selected style
+            setTimeout(() => loadV2Widget(style), 100); // Small delay to ensure DOM is ready
+        }
+        
+        // On load
+        window.addEventListener('DOMContentLoaded', function() {
             var script = document.createElement('script');
             script.src = '/cdn/ecb-widget/v2/widget.min.js';
             script.onload = function() {
-                window.popupWidgetV2 = new ECBWidget(getV2Config('popup'));
-                window.inlineWidgetV2 = new ECBWidget(getV2Config('inline'));
+                console.log('Widget SDK loaded');
+                showV2Preview('popup'); // Default to popup
+            };
+            script.onerror = function() {
+                console.error('Failed to load widget SDK');
             };
             document.head.appendChild(script);
-        }
-        // Tab logic
-        function showV2Preview(style) {
-            // Hide both previews
-            document.getElementById('popup-preview-v2').style.display = 'none';
-            document.getElementById('inline-preview-v2').style.display = 'none';
-            // Show selected
-            document.getElementById(style + '-preview-v2').style.display = '';
-            // Update tab button active state
-            var buttons = document.querySelectorAll('.tab-button');
-            buttons.forEach(function(btn) {
-                btn.classList.remove('active');
-            });
-            if (style === 'popup') {
-                buttons[0].classList.add('active');
-            } else {
-                buttons[1].classList.add('active');
-            }
-        }
-        // On load
-        window.addEventListener('DOMContentLoaded', function() {
-            loadV2Widgets();
-            showV2Preview('popup'); // Default to popup
         });
     </script>
 </body>

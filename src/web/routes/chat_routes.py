@@ -21,7 +21,7 @@ from pipeline.response_generator import ResponseGenerator
 chat_routes = Blueprint('chat_routes', __name__)
 
 @chat_routes.route('/api/bot/<bot_id>/chat', methods=['POST'])
-def chat_with_bot(bot_id):
+async def chat_with_bot(bot_id):
     """API endpoint for chatting with a bot"""
     # Load existing bots
     bots = BotManager.load_bots(current_app)
@@ -67,7 +67,7 @@ def chat_with_bot(bot_id):
     
     try:
         # Process message
-        response = kernel.process_message(user_message)
+        response = await kernel.process_message(user_message)
         return jsonify({"response": response})
         
     except ChatbotError as e:

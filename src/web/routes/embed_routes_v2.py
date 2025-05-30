@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, jsonify, current_app, Response, make_response
+from flask import Blueprint, render_template, request, jsonify, current_app, Response, make_response, send_from_directory
 import os
 import sys
 import json
@@ -423,19 +423,23 @@ def chat_api_v2(bot_id):
 @embed_routes_v2.route('/cdn/ecb-widget/v2/widget.min.js')
 def serve_widget_js():
     """Serve the minified widget JavaScript from CDN endpoint"""
+    # Use absolute path resolution to work with both Flask dev server and Hypercorn
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    web_dir = os.path.dirname(current_dir)  # Go up from routes/ to web/
+    static_dir = os.path.join(web_dir, 'static', 'embed')
+    file_path = os.path.join(static_dir, 'widget-sdk.js')
+    print(file_path)
     
-    # In production, this should be served from a real CDN
-    # For now, we'll serve the unminified version with proper headers
-    # with open('D:\E-CB\src\web\static\embed\widget-sdk.js', 'r') as f:
-
-    with open('D:\Tai Lieu Hoc Phan\DACN3\E-CB\src\web\static\embed\widget-sdk.js', 'r') as f:
-        js_content = f.read()
+    # Debug logging
+    current_app.logger.info(f"Serving widget SDK from: {file_path}")
+    current_app.logger.info(f"File exists: {os.path.exists(file_path)}")
+    if os.path.exists(file_path):
+        current_app.logger.info(f"File size: {os.path.getsize(file_path)} bytes")
     
-    response = make_response(js_content)
-    response.headers['Content-Type'] = 'application/javascript'
-    response.headers['Cache-Control'] = 'public, max-age=86400'  # 24 hours
-    response.headers['Access-Control-Allow-Origin'] = '*'
-    
+    response = make_response(send_from_directory(static_dir, 'widget-sdk.js', mimetype='application/javascript'))
+    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '0'
     return response
 
 @embed_routes_v2.route('/v2/bot/<bot_id>/analytics', methods=['POST'])

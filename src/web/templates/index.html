@@ -1,34 +1,59 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Chatbot Framework</title>
+    <title>Easy Chatbot Dashboard</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <div class="sidebar">
-        <h1>Chatbot Framework</h1>
-        <a href="{{ url_for('base_routes.create_bot') }}">Create New Bot</a>
+<div class="dashboard-container">
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="{{ url_for('static', filename='logo.svg') }}" alt="Logo" style="width:32px;height:32px;"/>
+      <span>Easy Chatbot</span>
     </div>
-
-    <div class="container">
-        <h2>Your Chatbots</h2>
-        {% if bots %}
-            <div class="bots-list">
-                {% for bot_id, bot in bots.items() %}
-                    <div class="bot-card">
-                        <h3>{{ bot.name }}</h3>
-                        <p>{{ bot.description }}</p>
-                        <div class="bot-actions">
-                            <a href="{{ url_for('bot_routes.bot_dashboard', bot_id=bot_id) }}" class="button">Manage</a>
-                            <a href="{{ url_for('bot_routes.chat_interface', bot_id=bot_id) }}" class="button">Chat</a>
-                        </div>
-                    </div>
-                {% endfor %}
+    <nav>
+      <a href="{{ url_for('base_routes.create_bot') }}" class="sidebar-btn active">
+        <i class="fa fa-plus"></i> Create New Bot
+      </a>
+    </nav>
+  </aside>
+  <main>
+    <header class="dashboard-header">
+      <div>
+        <h1>Your Chatbots</h1>
+        <p>Manage, customize, and deploy your chatbots easily.</p>
+      </div>
+      <a href="{{ url_for('base_routes.create_bot') }}" class="btn btn-primary">
+        <i class="fa fa-plus"></i> New Bot
+      </a>
+    </header>
+    <section class="bot-grid">
+      {% if bots %}
+        {% for bot_id, bot in bots.items() %}
+        <div class="bot-card">
+          <div class="bot-avatar">
+            <img src="{{ url_for('static', filename='bot-avatar.svg') }}" alt="Bot Avatar" />
+          </div>
+          <div class="bot-info">
+            <h2>{{ bot.name }}</h2>
+            <p>{{ bot.description or "No description" }}</p>
+            <div class="bot-meta">
+              <span class="status online"></span> Active
+              <span class="updated">Updated: {{ bot.updated_at or "N/A" }}</span>
             </div>
-        {% else %}
-            <p>You don't have any chatbots yet. Create one to get started!</p>
-        {% endif %}
-    </div>
+          </div>
+          <div class="bot-actions">
+            <a href="{{ url_for('bot_routes.bot_dashboard', bot_id=bot_id) }}" class="btn btn-secondary">Manage</a>
+            <a href="{{ url_for('bot_routes.chat_interface', bot_id=bot_id) }}" class="btn btn-accent">Chat</a>
+          </div>
+        </div>
+        {% endfor %}
+      {% else %}
+        <p>You don't have any chatbots yet. Create one to get started!</p>
+      {% endif %}
+    </section>
+  </main>
+</div>
 </body>
-
 </html>

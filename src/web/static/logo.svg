@@ -1,0 +1,13 @@
+<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="80" height="80" rx="20" fill="#FF6B00"/>
+  <g>
+    <!-- Chat bubble -->
+    <rect x="16" y="22" width="48" height="32" rx="12" fill="#fff"/>
+    <polygon points="40,54 34,64 46,54" fill="#fff"/>
+    <!-- Eyes (dots) -->
+    <circle cx="32" cy="38" r="3" fill="#FF6B00"/>
+    <circle cx="48" cy="38" r="3" fill="#FF6B00"/>
+    <!-- E-CB text -->
+    <text x="40" y="75" text-anchor="middle" font-size="16" font-family="Arial, sans-serif" font-weight="bold" fill="#fff">E-CB</text>
+  </g>
+</svg>

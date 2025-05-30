@@ -143,6 +143,47 @@
                     box-shadow: 0 6px 25px rgba(0,0,0,0.2);
                 }
                 
+                .ecb-drawer-trigger {
+                    position: fixed;
+                    width: 60px;
+                    height: 60px;
+                    border-radius: 50%;
+                    background: var(--primary-color);
+                    color: white;
+                    border: none;
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 24px;
+                    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+                    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                    z-index: 999999;
+                }
+                
+                .ecb-drawer-trigger:hover {
+                    transform: scale(1.1);
+                    box-shadow: 0 6px 25px rgba(0,0,0,0.2);
+                }
+                
+                .ecb-drawer-overlay {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100vw;
+                    height: 100vh;
+                    background: rgba(0,0,0,0.5);
+                    opacity: 0;
+                    visibility: hidden;
+                    transition: opacity 0.3s ease, visibility 0.3s ease;
+                    z-index: 999997;
+                }
+                
+                .ecb-drawer-overlay.active {
+                    opacity: 1;
+                    visibility: visible;
+                }
+                
                 .ecb-chat-window {
                     position: fixed;
                     width: ${this.config.width}px;
@@ -163,6 +204,144 @@
                     transform: translateY(0) scale(1);
                 }
                 
+                .ecb-inline-widget {
+                    width: 100%;
+                    max-width: 100%;
+                    display: block;
+                }
+                
+                .ecb-inline-widget .ecb-chat-window {
+                    position: relative;
+                    width: 100%;
+                    height: auto;
+                    min-height: 400px;
+                    max-height: 600px;
+                    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+                    opacity: 1;
+                    transform: none;
+                    margin: 0;
+                    overflow: visible;
+                }
+                
+                .ecb-inline-widget .ecb-chat-messages {
+                    min-height: 250px;
+                    max-height: 350px;
+                    overflow-y: auto;
+                    flex: 1;
+                }
+                
+                .ecb-inline-widget .ecb-input-area {
+                    flex-shrink: 0;
+                    position: relative;
+                    bottom: 0;
+                    width: 100%;
+                    background: white;
+                    border-top: 1px solid #e9ecef;
+                    z-index: 10;
+                    padding: 16px;
+                    min-height: 70px;
+                }
+                
+                .ecb-inline-widget .ecb-input {
+                    min-height: 40px;
+                    max-height: 100px;
+                    background: white;
+                    border: 2px solid #e9ecef;
+                    font-size: 14px;
+                    padding: 12px 16px;
+                }
+                
+                .ecb-inline-widget .ecb-input:focus {
+                    border-color: var(--primary-color);
+                    box-shadow: 0 0 0 1px var(--primary-color);
+                }
+                
+                .ecb-drawer-widget .ecb-chat-window {
+                    position: fixed;
+                    top: 0;
+                    right: -400px;
+                    width: 400px;
+                    height: 100vh;
+                    border-radius: 0;
+                    transform: none;
+                    opacity: 1;
+                    transition: right 0.3s ease-in-out;
+                    z-index: 999998;
+                    box-shadow: -5px 0 20px rgba(0,0,0,0.2);
+                }
+                
+                .ecb-drawer-widget .ecb-chat-window.open {
+                    right: 0px;
+                }
+                
+                .ecb-fullscreen-container {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100vw;
+                    height: 100vh;
+                    background: white;
+                    z-index: 999999;
+                    display: flex;
+                    flex-direction: column;
+                    opacity: 0;
+                    visibility: hidden;
+                    transition: opacity 0.3s ease, visibility 0.3s ease;
+                }
+                
+                .ecb-fullscreen-container.open {
+                    opacity: 1;
+                    visibility: visible;
+                }
+                
+                .ecb-fullscreen-trigger {
+                    position: fixed;
+                    bottom: 20px;
+                    right: 20px;
+                    width: 60px;
+                    height: 60px;
+                    border-radius: 50%;
+                    background: var(--primary-color);
+                    color: white;
+                    border: none;
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 24px;
+                    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+                    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                    z-index: 999999;
+                }
+                
+                .ecb-fullscreen-trigger:hover {
+                    transform: scale(1.1);
+                    box-shadow: 0 6px 25px rgba(0,0,0,0.2);
+                }
+                
+                .ecb-fullscreen-close {
+                    position: absolute;
+                    top: 20px;
+                    right: 20px;
+                    width: 40px;
+                    height: 40px;
+                    background: rgba(0,0,0,0.1);
+                    color: #666;
+                    border: none;
+                    border-radius: 50%;
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 24px;
+                    transition: all 0.2s;
+                    z-index: 1000000;
+                }
+                
+                .ecb-fullscreen-close:hover {
+                    background: rgba(0,0,0,0.2);
+                }
+                
                 .ecb-chat-header {
                     background: var(--primary-color);
                     color: white;
@@ -170,6 +349,21 @@
                     display: flex;
                     align-items: center;
                     justify-content: space-between;
+                }
+                
+                .ecb-close-button {
+                    background: none;
+                    border: none;
+                    color: white;
+                    font-size: 20px;
+                    cursor: pointer;
+                    padding: 4px;
+                    border-radius: 4px;
+                    transition: background-color 0.2s;
+                }
+                
+                .ecb-close-button:hover {
+                    background: rgba(255,255,255,0.1);
                 }
                 
                 .ecb-chat-messages {
@@ -304,6 +498,38 @@
                         right: 10px !important;
                         bottom: 10px !important;
                     }
+                    
+                    .ecb-inline-widget .ecb-chat-window {
+                        width: 100% !important;
+                        height: auto !important;
+                        position: relative !important;
+                        top: auto !important;
+                        left: auto !important;
+                        right: auto !important;
+                        bottom: auto !important;
+                        min-height: 350px !important;
+                        max-height: 500px !important;
+                        overflow: visible !important;
+                    }
+                    
+                    .ecb-inline-widget .ecb-chat-messages {
+                        min-height: 200px !important;
+                        max-height: 300px !important;
+                    }
+                    
+                    .ecb-inline-widget .ecb-input-area {
+                        min-height: 70px !important;
+                        padding: 12px !important;
+                    }
+                    
+                    .ecb-drawer-widget .ecb-chat-window {
+                        width: 100vw !important;
+                        right: -100vw !important;
+                    }
+                    
+                    .ecb-drawer-widget .ecb-chat-window.open {
+                        right: 0px !important;
+                    }
                 }
             `;
         }
@@ -359,9 +585,6 @@
             widget.className = 'ecb-widget ecb-inline-widget';
             
             const chatWindow = this.createChatWindow();
-            chatWindow.style.position = 'relative';
-            chatWindow.style.opacity = '1';
-            chatWindow.style.transform = 'none';
             chatWindow.classList.add('open');
             
             widget.appendChild(chatWindow);
@@ -371,6 +594,120 @@
             this.isOpen = true;
         }
 
+        createDrawerWidget(container) {
+            const widget = document.createElement('div');
+            widget.className = 'ecb-widget ecb-drawer-widget';
+            
+            // Create trigger button
+            const trigger = document.createElement('button');
+            trigger.className = 'ecb-drawer-trigger';
+            trigger.innerHTML = '💬';
+            
+            // Create drawer chat window
+            const chatWindow = this.createChatWindow();
+            
+            // Create overlay
+            const overlay = document.createElement('div');
+            overlay.className = 'ecb-drawer-overlay';
+            
+            widget.appendChild(trigger);
+            widget.appendChild(overlay);
+            widget.appendChild(chatWindow);
+            container.appendChild(widget);
+            
+            this.elements.trigger = trigger;
+            this.elements.chatWindow = chatWindow;
+            this.elements.overlay = overlay;
+            
+            // Override open/close methods for drawer behavior
+            this.openChat = () => {
+                this.isOpen = true;
+                chatWindow.classList.add('open');
+                overlay.classList.add('active');
+                if (this.config.onOpen) this.config.onOpen(this);
+            };
+            
+            this.closeChat = () => {
+                this.isOpen = false;
+                chatWindow.classList.remove('open');
+                overlay.classList.remove('active');
+                if (this.config.onClose) this.config.onClose(this);
+            };
+        }
+
+        createFullscreenWidget(container) {
+            const widget = document.createElement('div');
+            widget.className = 'ecb-widget ecb-fullscreen-widget';
+            
+            // Create trigger button
+            const trigger = document.createElement('button');
+            trigger.className = 'ecb-fullscreen-trigger';
+            trigger.innerHTML = '💬';
+            
+            // Create fullscreen chat container
+            const fullscreenContainer = document.createElement('div');
+            fullscreenContainer.className = 'ecb-fullscreen-container';
+            
+            // Create fullscreen header
+            const fullscreenHeader = document.createElement('div');
+            fullscreenHeader.style.background = this.config.primaryColor;
+            fullscreenHeader.style.color = 'white';
+            fullscreenHeader.style.padding = '15px 20px';
+            fullscreenHeader.style.display = 'flex';
+            fullscreenHeader.style.justifyContent = 'space-between';
+            fullscreenHeader.style.alignItems = 'center';
+            fullscreenHeader.innerHTML = `
+                <div>
+                    <h3 style="margin: 0; font-size: 18px;">${this.config.botName || 'Chatbot'}</h3>
+                    <p style="margin: 0; font-size: 14px; opacity: 0.8;">Online</p>
+                </div>
+                <button class="ecb-fullscreen-close" style="background: none; border: none; color: white; font-size: 24px; cursor: pointer; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">×</button>
+            `;
+            
+            // Create chat window for fullscreen
+            const chatWindow = this.createChatWindow();
+            chatWindow.style.position = 'relative';
+            chatWindow.style.flex = '1';
+            chatWindow.style.height = 'auto';
+            chatWindow.style.borderRadius = '0';
+            chatWindow.style.boxShadow = 'none';
+            chatWindow.style.opacity = '1';
+            chatWindow.style.transform = 'none';
+            // Remove the default header since we have a custom one
+            const defaultHeader = chatWindow.querySelector('.ecb-chat-header');
+            if (defaultHeader) defaultHeader.remove();
+            
+            fullscreenContainer.appendChild(fullscreenHeader);
+            fullscreenContainer.appendChild(chatWindow);
+            
+            widget.appendChild(trigger);
+            widget.appendChild(fullscreenContainer);
+            container.appendChild(widget);
+            
+            this.elements.trigger = trigger;
+            this.elements.chatWindow = chatWindow;
+            this.elements.fullscreenContainer = fullscreenContainer;
+            this.elements.fullscreenClose = fullscreenHeader.querySelector('.ecb-fullscreen-close');
+            
+            // Override open/close methods for fullscreen behavior
+            this.openChat = () => {
+                this.isOpen = true;
+                fullscreenContainer.classList.add('open');
+                if (this.config.onOpen) this.config.onOpen(this);
+            };
+            
+            this.closeChat = () => {
+                this.isOpen = false;
+                fullscreenContainer.classList.remove('open');
+                if (this.config.onClose) this.config.onClose(this);
+            };
+            
+            // Auto-open if this is fullscreen (since it's likely the only widget on the page)
+            if (this.config.autoOpen) {
+                setTimeout(() => this.openChat(), 100);
+            }
+        }
+
         createChatWindow() {
             const chatWindow = document.createElement('div');
             chatWindow.className = 'ecb-chat-window';
@@ -378,12 +715,15 @@
             // Header
             const header = document.createElement('div');
             header.className = 'ecb-chat-header';
+            
+            const showCloseButton = this.config.embedStyle === 'popup' || this.config.embedStyle === 'drawer';
+            
             header.innerHTML = `
                 <div>
                     <div style="font-weight: 600;">${this.config.botName || 'Chatbot'}</div>
                     <div style="font-size: 12px; opacity: 0.8;">Online</div>
                 </div>
-                ${this.config.embedStyle === 'popup' ? '<button class="ecb-close-button" style="background: none; border: none; color: white; font-size: 20px; cursor: pointer;">×</button>' : ''}
+                ${showCloseButton ? '<button class="ecb-close-button" style="background: none; border: none; color: white; font-size: 20px; cursor: pointer;">×</button>' : ''}
             `;
             
             // Messages area
@@ -428,6 +768,16 @@
             // Close button
             if (this.elements.closeButton) {
                 this.elements.closeButton.addEventListener('click', () => this.closeChat());
+            }
+            
+            // Drawer overlay (click to close)
+            if (this.elements.overlay) {
+                this.elements.overlay.addEventListener('click', () => this.closeChat());
+            }
+            
+            // Fullscreen close button
+            if (this.elements.fullscreenClose) {
+                this.elements.fullscreenClose.addEventListener('click', () => this.closeChat());
             }
             
             // Send button
@@ -615,11 +965,34 @@
 
         // Public API methods
         destroy() {
+            // Remove all widget elements
             if (this.elements.widget) {
                 this.elements.widget.remove();
             }
-            const styles = document.getElementById('ecb-widget-styles');
-            if (styles) styles.remove();
+            
+            // Clean up individual elements
+            const elementsToRemove = [
+                '.ecb-widget',
+                '.ecb-popup-trigger',
+                '.ecb-chat-window',
+                '.ecb-drawer-overlay',
+                '.ecb-fullscreen-container'
+            ];
+            
+            elementsToRemove.forEach(selector => {
+                const elements = document.querySelectorAll(selector);
+                elements.forEach(el => el.remove());
+            });
+            
+            // Remove styles (but check if other widgets are still using them)
+            const otherWidgets = document.querySelectorAll('.ecb-widget');
+            if (otherWidgets.length === 0) {
+                const styles = document.getElementById('ecb-widget-styles');
+                if (styles) styles.remove();
+            }
+            
+            // Clear elements reference
+            this.elements = {};
         }
 
         updateConfig(newConfig) {

@@ -26,5 +26,24 @@
             "I don't understand.",
             "Could you rephrase that?"
         ]
+    },
+    "settings": {
+        "nlu_type": "simple",
+        "debug": false,
+        "error_handling": {
+            "default_response": "I'm sorry, I didn't understand that.",
+            "custom_responses": {}
+        },
+        "appearance": {
+            "theme": "default",
+            "primary_color": "#007bff",
+            "bot_name_display": "test",
+            "welcome_message": "Hello! How can I help you today?"
+        },
+        "integration": {
+            "enabled": true,
+            "domains": [],
+            "embed_style": "popup"
+        }
     }
 }
